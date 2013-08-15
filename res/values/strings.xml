@@ -17,5 +17,6 @@
     <string name="title_activity_tip_success">Thanks for the Tap!</string>
     <string name="tipAgain">One More Time!</string>
     <string name="tipAmountDefault">$1 Tip!  WOOT!</string>
+    <string name="logo_desc">TDA Logo</string>
 
 </resources>
