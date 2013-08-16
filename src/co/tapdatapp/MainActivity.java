@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 
 public class MainActivity extends Activity {
-	private NfcAdapter mNfcAdapter;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -22,15 +21,41 @@ public class MainActivity extends Activity {
             finish();
             return;
         }
-        if (!mNfcAdapter.isEnabled()) {
-            Toast.makeText(this, "NFC DISABLED!", Toast.LENGTH_LONG).show();
+        if (mNfcAdapter.isEnabled()) {
+            if (null == mCamera) {
+                try {
+            	    mCamera = Camera.open(); // locks it to stop other applications from using it
+                }
+                catch(Exception e) {
+                	Log.e('TapDatApp', "Can't disable the camera");
+                }
+            }        	
         } else {
 //            mTextView.setText(R.string.explanation);
+			Toast.makeText(this, "NFC DISABLED!", Toast.LENGTH_LONG).show();
         }
         handleIntent(getIntent());
-
 	}
-	private void handleIntent(Intent intent) {
+	
+    /*protected void onStart();
+    
+    protected void onRestart();
+
+    protected void onResume();
+
+    protected void onPause();
+
+    protected void onStop();*/
+
+    protected void onDestroy() {
+    	if (null != mCamera) {
+    		// Let other apps use the camera
+    		mCamera.release();
+    	    mCamera = null;
+        }
+    }
+    
+    private void handleIntent(Intent intent) {
 	    // TODO: handle Intent
 	}
 
@@ -49,4 +74,6 @@ public class MainActivity extends Activity {
 		
 	}
 
+	private NfcAdapter mNfcAdapter;
+	private Camera mCamera;	
 }
