@@ -3,6 +3,7 @@ package co.tapdatapp;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.PendingIntent;
+import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -25,12 +26,12 @@ public class TapReady extends Activity {
 		// Intent filters for exchanging over p2p.
 		IntentFilter ndefDetected = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
 		try {
-		    ndefDetected.addDataType("text/plain");
+		    ndefDetected.addDataType("tapdat/performer");
 		} catch (MalformedMimeTypeException e) {
 		}
 		IntentFilter[] mNdefExchangeFilters = new IntentFilter[] { ndefDetected };
 		
-		Toast.makeText(this, mNdefExchangeFilters.toString(), Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, mNdefExchangeFilters.toString(), Toast.LENGTH_LONG).show();
 		
 		
 	}
@@ -41,6 +42,21 @@ public class TapReady extends Activity {
 		getMenuInflater().inflate(R.menu.tap_ready, menu);
 		return true;
 	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+	    // NDEF exchange mode
+		// check write mode: !mWriteMode &&
+	    if ( NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+	        NdefMessage[] msgs = NfcUtils.getNdefMessages(intent);
+	        //fireFriendRequest(msgs[0]);
+			Intent i = new Intent(this, TipSuccess.class);
+			startActivity(i);
+			
+	        Toast.makeText(this, "You tapped dat ass via nfc!", Toast.LENGTH_LONG).show();
+	    }
+	}
+	
 	public void readyForTap(View view){
 
 	
