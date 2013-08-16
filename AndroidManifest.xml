@@ -5,14 +5,19 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="16"
         android:targetSdkVersion="18" />
-	
-	<uses-permission android:name="android.permission.NFC" />
+
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-feature android:name="android.hardware.nfc" android:required="true" />
-    <uses-feature android:name="android.hardware.camera" android:required="true" /> 
-     
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
     <application
         android:allowBackup="true"
         android:icon="@drawable/tda_icon"
@@ -34,14 +39,20 @@
         <activity
             android:name="co.tapdatapp.TapReady"
             android:label="@string/title_activity_tap_ready" >
-        		<intent-filter>
-                <action android:name="android.nfc.action.TAG_DISCOVERED"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
+			<intent-filter>
+			      <action android:name="android.nfc.action.NDEF_DISCOVERED"/>
+			      <data android:mimeType="text/plain"/>
+			      <category android:name="android.intent.category.DEFAULT"/>
+			    </intent-filter>
         </activity>
         <activity
             android:name="co.tapdatapp.TipSuccess"
             android:label="@string/title_activity_tip_success" >
         </activity>
+        <activity
+            android:name="co.tapdatapp.WriteTag"
+            android:label="@string/title_activity_write_tag" >
+        </activity>
     </application>
+
 </manifest>

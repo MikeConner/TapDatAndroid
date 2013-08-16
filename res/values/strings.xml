@@ -18,5 +18,7 @@
     <string name="tipAgain">One More Time!</string>
     <string name="tipAmountDefault">$1 Tip!  WOOT!</string>
     <string name="logo_desc">TDA Logo</string>
+    <string name="title_activity_write_tag">WriteTag</string>
+    <string name="write_tag_button">write</string>
 
 </resources>

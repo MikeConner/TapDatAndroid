@@ -3,6 +3,8 @@ package co.tapdatapp;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Camera;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.nfc.NfcAdapter;
@@ -24,10 +26,10 @@ public class MainActivity extends Activity {
         if (mNfcAdapter.isEnabled()) {
             if (null == mCamera) {
                 try {
-            	    mCamera = Camera.open(); // locks it to stop other applications from using it
+            	    //mCamera = Camera.open(); // locks it to stop other applications from using it
                 }
                 catch(Exception e) {
-                	Log.e('TapDatApp', "Can't disable the camera");
+                	//Log.e("bob", "Can't disable the camera");
                 }
             }        	
         } else {
@@ -50,7 +52,7 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
     	if (null != mCamera) {
     		// Let other apps use the camera
-    		mCamera.release();
+    		//mCamera.release();
     	    mCamera = null;
         }
     }
@@ -73,7 +75,12 @@ public class MainActivity extends Activity {
 		startActivity(i);
 		
 	}
-
+	public void writeTag(View view){
+		
+		Intent i = new Intent(this, WriteTag.class);
+		startActivity(i);
+		
+	}
 	private NfcAdapter mNfcAdapter;
 	private Camera mCamera;	
 }
