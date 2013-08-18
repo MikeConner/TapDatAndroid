@@ -2,7 +2,9 @@ package co.tapdatapp;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
+import android.view.View;
 
 public class RegisterToTap extends Activity {
 
@@ -18,5 +20,12 @@ public class RegisterToTap extends Activity {
 		getMenuInflater().inflate(R.menu.register_to_tap, menu);
 		return true;
 	}
-
+	public void registerNewAccount(View view){
+		
+		Intent i = new Intent(this, TipActivity.class);
+		startActivity(i);
+		
+	}
+	
+	
 }

@@ -25,8 +25,17 @@
 
     
     <string name="user_email">Your Email</string>
+    <string name="user_name">NickName</string>
+    
     <string name="user_password">Password</string>
 
+    <string name="user_password_confirmation">Password Again</string>
+
+    <string name="register_disclaimer">Read our Privacy and Legal Disclaimers on TapDatApp.co</string>
+    <string name="register">Register</string>
+        
+    
+    
     <string name="login">Log In</string>
     <string name="welcome_title">Howdy</string>
     <string name="no_tip">Select a tip</string>

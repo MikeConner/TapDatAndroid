@@ -47,6 +47,7 @@
         android:layout_alignRight="@+id/imageButton1"
         android:layout_below="@+id/button2"
         android:contentDescription="register"
+        android:onClick="registerForTap"
         android:src="@drawable/register_button2" />
 
 </RelativeLayout>

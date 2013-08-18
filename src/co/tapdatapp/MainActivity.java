@@ -71,6 +71,15 @@ public class MainActivity extends Activity {
 		startActivity(i);
 		
 	}
+
+	public void registerForTap(View view){
+		
+		Intent i = new Intent(this, RegisterToTap.class);
+		startActivity(i);
+		
+	}
+
+	
 	public void writeTag(View view){
 		
 		Intent i = new Intent(this, WriteTag.class);
