@@ -3,7 +3,6 @@ package co.tapdatapp;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Camera;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -16,7 +15,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
+		
+/*		mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (mNfcAdapter == null) {
             // Stop here, we definitely need NFC
             Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
@@ -36,6 +37,8 @@ public class MainActivity extends Activity {
 //            mTextView.setText(R.string.explanation);
 			Toast.makeText(this, "NFC DISABLED!", Toast.LENGTH_LONG).show();
         }
+*/
+		
         handleIntent(getIntent());
 	}
 	
@@ -49,13 +52,6 @@ public class MainActivity extends Activity {
 
     protected void onStop();*/
 
-    protected void onDestroy() {
-    	if (null != mCamera) {
-    		// Let other apps use the camera
-    		//mCamera.release();
-    	    mCamera = null;
-        }
-    }
     
     private void handleIntent(Intent intent) {
 	    // TODO: handle Intent
@@ -71,7 +67,7 @@ public class MainActivity extends Activity {
 	//*Log In Code goes here
 	public void logInToApp(View view){
 		
-		Intent i = new Intent(this, TipActivity.class);
+		Intent i = new Intent(this, LogInToTap.class);
 		startActivity(i);
 		
 	}
@@ -82,5 +78,4 @@ public class MainActivity extends Activity {
 		
 	}
 	private NfcAdapter mNfcAdapter;
-	private Camera mCamera;	
 }

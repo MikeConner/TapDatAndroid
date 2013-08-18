@@ -21,17 +21,6 @@
         android:src="@drawable/tda_logo" />
 
     <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/imageView1"
-        android:layout_alignLeft="@+id/imageView1"
-        android:layout_alignRight="@+id/imageView1"
-        android:gravity="center_vertical|center_horizontal|right"
-        android:onClick="logInToApp"
-        android:text="@string/login_button" />
-
-    <Button
         android:id="@+id/button2"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
@@ -40,5 +29,24 @@
         android:layout_alignParentTop="true"
         android:onClick="writeTag"
         android:text="@string/write_tag_button" />
+
+    <ImageButton
+        android:id="@+id/imageButton1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignTop="@+id/button2"
+        android:contentDescription="log in"
+        android:onClick="logInToApp"
+        android:src="@drawable/login_button" />
+
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/imageButton1"
+        android:layout_below="@+id/button2"
+        android:contentDescription="register"
+        android:src="@drawable/register_button2" />
 
 </RelativeLayout>

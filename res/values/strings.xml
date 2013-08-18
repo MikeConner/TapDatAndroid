@@ -20,5 +20,14 @@
     <string name="logo_desc">TDA Logo</string>
     <string name="title_activity_write_tag">WriteTag</string>
     <string name="write_tag_button">write</string>
+    <string name="title_activity_log_in_to_tap">LogInToTap</string>
+    <string name="title_activity_register_to_tap">RegisterToTap</string>
 
+    
+    <string name="user_email">Your Email</string>
+    <string name="user_password">Password</string>
+
+    <string name="login">Log In</string>
+    <string name="welcome_title">Howdy</string>
+    
 </resources>
