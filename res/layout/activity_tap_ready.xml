@@ -9,4 +9,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TapReady" >
 
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="125dp"
+        android:background="#333333"
+        android:contentDescription="Tip Amount"
+        android:gravity="center_horizontal"
+        android:text="NO TIP"
+        android:textColor="#DDDDDD"
+        android:textSize="44sp" />
+
 </RelativeLayout>

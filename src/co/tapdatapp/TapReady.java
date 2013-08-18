@@ -10,6 +10,8 @@ import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class TapReady extends Activity {
@@ -18,7 +20,13 @@ public class TapReady extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_tap_ready);
-		
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+		    String tip_amount = extras.getString("tip_amount");
+		    TextView edit_text1 = (TextView) findViewById(R.id.textView1); 
+			
+			edit_text1.setText(tip_amount);
+		}
 		
 		NfcAdapter mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 		Object mNfcPendingIntent = PendingIntent.getActivity(this, 0,

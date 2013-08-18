@@ -29,5 +29,6 @@
 
     <string name="login">Log In</string>
     <string name="welcome_title">Howdy</string>
+    <string name="no_tip">Select a tip</string>
     
 </resources>
