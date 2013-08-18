@@ -9,68 +9,79 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".TipActivity" >
 
-    <RadioGroup
-        android:id="@+id/radioGroup1"
-        android:layout_width="wrap_content"
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
-         >
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:background="#333333" >
 
-        <RadioButton
-            android:id="@+id/radio0"
+        <LinearLayout
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="@string/tip1" 
-            android:textColor="#FFFFFF"/>
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
 
-        <RadioButton
-            android:id="@+id/radio1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tip2"
-             
-            android:textColor="#FFFFFF"
-             />
+            <ImageButton
+                android:id="@+id/imageButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="One Dollar"
+                android:src="@drawable/ic_action_one" />
 
-        <RadioButton
-            android:id="@+id/radio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Two Dollars"
+                android:src="@drawable/ic_action_two" />
 
-            android:text="@string/tip5" />
+            <ImageButton
+                android:id="@+id/imageButton6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Three Dollars"
+                android:src="@drawable/ic_action_three" />
 
-        <RadioButton
-            android:id="@+id/radio3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Five Dollars"
+                android:src="@drawable/ic_action_five" />
 
-            android:text="@string/tip10" />
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_ten" 
+                android:contentDescription="Ten Dollars"
+                />
 
-        <RadioButton
-            android:id="@+id/radio4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            <ImageButton
+                android:id="@+id/imageButton5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_twenty"
+               android:contentDescription="Twenty Dollars"
+                 />
 
-            android:text="@string/tip20" />
-    </RadioGroup>
+        </LinearLayout>
+    </HorizontalScrollView>
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
+        android:layout_above="@+id/horizontalScrollView1"
+        android:layout_alignLeft="@+id/horizontalScrollView1"
+        android:layout_alignRight="@+id/horizontalScrollView1"
+        android:background="#FFFF0000"
         android:onClick="readyForTap"
         android:text="@string/tip_button_string"
-        android:background="#FFFF0000"
-        android:textColor="#FFFFFF"
-         />
+        android:textColor="#FFFFFF" />
 
 </RelativeLayout>
