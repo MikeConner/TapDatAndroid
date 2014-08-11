@@ -1,0 +1,115 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/tip_bg"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".TipActivity" >
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView1"
+        android:fillViewport="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:background="#333333" >
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+
+            <ImageButton
+                android:id="@+id/imageButton1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="One Dollar"
+                android:onClick="selectTip" 
+                android:tag="$1 Tip"
+                android:src="@drawable/ic_action_one" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Two Dollars"
+                android:onClick="selectTip" 
+                android:tag="$2 Tip"
+                android:src="@drawable/ic_action_two" />
+
+            <ImageButton
+                android:id="@+id/imageButton6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Three Dollars"
+                android:onClick="selectTip" 
+                android:tag="$3 Tip"
+                android:src="@drawable/ic_action_three" />
+
+            <ImageButton
+                android:id="@+id/imageButton3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="Five Dollars"
+                android:onClick="selectTip" 
+                android:tag="$5 Tip"              
+                android:src="@drawable/ic_action_five" />
+
+            <ImageButton
+                android:id="@+id/imageButton4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_ten" 
+                android:onClick="selectTip" 
+                android:tag="$10 Tip"                
+                android:contentDescription="Ten Dollars"
+                />
+
+            <ImageButton
+                android:id="@+id/imageButton5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_action_twenty"
+                android:onClick="selectTip" 
+                android:tag="$20 Tip"
+                android:contentDescription="Twenty Dollars"
+                 />
+
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/horizontalScrollView1"
+        android:layout_alignLeft="@+id/horizontalScrollView1"
+        android:layout_alignRight="@+id/horizontalScrollView1"
+        android:background="#FFFF0000"
+        android:onClick="readyForTap"
+        android:text="@string/tip_button_string"
+        android:textColor="#FFFFFF"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/editText1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:background="#333333"
+        android:contentDescription="@string/no_tip"
+        android:ems="10"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="@string/no_tip"
+        android:textColor="#DDDDDD"
+        android:textSize="24sp" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout><!-- From: file:/C:/Users/I836167/Documents/GitHub/TapDatAndroid/tapdat/app/src/main/res/layout/activity_tip.xml -->

@@ -1,0 +1,162 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+* .gitignore
+* README.md
+* ic_launcher-web.png
+* proguard-project.txt
+* register_button-web.png
+* tapdat\
+* tapdat\.idea\
+* tapdat\.idea\.name
+* tapdat\.idea\compiler.xml
+* tapdat\.idea\copyright\
+* tapdat\.idea\copyright\profiles_settings.xml
+* tapdat\.idea\encodings.xml
+* tapdat\.idea\misc.xml
+* tapdat\.idea\modules.xml
+* tapdat\.idea\scopes\
+* tapdat\.idea\scopes\scope_settings.xml
+* tapdat\.idea\vcs.xml
+* tapdat\.idea\workspace.xml
+* tapdat\app\
+* tapdat\app\build.gradle
+* tapdat\app\src\
+* tapdat\app\src\main\
+* tapdat\app\src\main\AndroidManifest.xml
+* tapdat\app\src\main\java\
+* tapdat\app\src\main\java\co\
+* tapdat\app\src\main\java\co\tapdatapp\
+* tapdat\app\src\main\java\co\tapdatapp\LogInToTap.java
+* tapdat\app\src\main\java\co\tapdatapp\MainActivity.java
+* tapdat\app\src\main\java\co\tapdatapp\NfcUtils.java
+* tapdat\app\src\main\java\co\tapdatapp\RegisterToTap.java
+* tapdat\app\src\main\java\co\tapdatapp\TapReady.java
+* tapdat\app\src\main\java\co\tapdatapp\TipActivity.java
+* tapdat\app\src\main\java\co\tapdatapp\TipSuccess.java
+* tapdat\app\src\main\java\co\tapdatapp\WriteTag.java
+* tapdat\app\src\main\res\
+* tapdat\app\src\main\res\drawable-hdpi\
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_five.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_one.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_ten.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_three.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_tip_not_selected.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_twenty.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_action_two.png
+* tapdat\app\src\main\res\drawable-hdpi\ic_launcher.png
+* tapdat\app\src\main\res\drawable-hdpi\register_button.png
+* tapdat\app\src\main\res\drawable-hdpi\tda_icon.png
+* tapdat\app\src\main\res\drawable-mdpi\
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_five.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_one.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_ten.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_three.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_tip_not_selected.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_twenty.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_action_two.png
+* tapdat\app\src\main\res\drawable-mdpi\ic_launcher.png
+* tapdat\app\src\main\res\drawable-mdpi\register_button.png
+* tapdat\app\src\main\res\drawable-mdpi\tda_icon.png
+* tapdat\app\src\main\res\drawable-xhdpi\
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_five.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_one.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_ten.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_three.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_tip_not_selected.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_twenty.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_action_two.png
+* tapdat\app\src\main\res\drawable-xhdpi\ic_launcher.png
+* tapdat\app\src\main\res\drawable-xhdpi\register_button.png
+* tapdat\app\src\main\res\drawable-xhdpi\tda_icon.png
+* tapdat\app\src\main\res\drawable-xxhdpi\
+* tapdat\app\src\main\res\drawable-xxhdpi\ic_launcher.png
+* tapdat\app\src\main\res\drawable-xxhdpi\login_button.png
+* tapdat\app\src\main\res\drawable-xxhdpi\register_button2.png
+* tapdat\app\src\main\res\drawable-xxhdpi\start_up.jpg
+* tapdat\app\src\main\res\drawable-xxhdpi\tda_icon.png
+* tapdat\app\src\main\res\drawable-xxhdpi\tda_logo.png
+* tapdat\app\src\main\res\drawable-xxhdpi\thank_you.jpg
+* tapdat\app\src\main\res\drawable-xxhdpi\tip_bg.jpg
+* tapdat\app\src\main\res\drawable-xxhdpi\wait_to_tap.jpg
+* tapdat\app\src\main\res\layout\
+* tapdat\app\src\main\res\layout\activity_log_in_to_tap.xml
+* tapdat\app\src\main\res\layout\activity_main.xml
+* tapdat\app\src\main\res\layout\activity_register_to_tap.xml
+* tapdat\app\src\main\res\layout\activity_tap_ready.xml
+* tapdat\app\src\main\res\layout\activity_tip.xml
+* tapdat\app\src\main\res\layout\activity_tip_success.xml
+* tapdat\app\src\main\res\layout\activity_write_tag.xml
+* tapdat\app\src\main\res\menu\
+* tapdat\app\src\main\res\menu\log_in_to_tap.xml
+* tapdat\app\src\main\res\menu\main.xml
+* tapdat\app\src\main\res\menu\register_to_tap.xml
+* tapdat\app\src\main\res\menu\tap_ready.xml
+* tapdat\app\src\main\res\menu\tip.xml
+* tapdat\app\src\main\res\menu\tip_success.xml
+* tapdat\app\src\main\res\menu\write_tag.xml
+* tapdat\app\src\main\res\values-sw600dp\
+* tapdat\app\src\main\res\values-sw600dp\dimens.xml
+* tapdat\app\src\main\res\values-sw720dp-land\
+* tapdat\app\src\main\res\values-sw720dp-land\dimens.xml
+* tapdat\app\src\main\res\values-v11\
+* tapdat\app\src\main\res\values-v11\styles.xml
+* tapdat\app\src\main\res\values-v14\
+* tapdat\app\src\main\res\values-v14\styles.xml
+* tapdat\app\src\main\res\values\
+* tapdat\app\src\main\res\values\dimens.xml
+* tapdat\app\src\main\res\values\strings.xml
+* tapdat\app\src\main\res\values\styles.xml
+* tapdat\app\src\main\res\xml\
+* tapdat\app\src\main\res\xml\nfc_tech_filter.xml
+* tapdat\build.gradle
+* tapdat\gradle\
+* tapdat\gradle\wrapper\
+* tapdat\gradle\wrapper\gradle-wrapper.jar
+* tapdat\gradle\wrapper\gradle-wrapper.properties
+* tapdat\gradlew
+* tapdat\gradlew.bat
+* tapdat\local.properties
+* tapdat\settings.gradle
+
+Replaced Jars with Dependencies:
+--------------------------------
+The importer recognized the following .jar files as third party
+libraries and replaced them with Gradle dependencies instead. This has
+the advantage that more explicit version information is known, and the
+libraries can be updated automatically. However, it is possible that
+the .jar file in your project was of an older version than the
+dependency we picked, which could render the project not compileable.
+You can disable the jar replacement in the import wizard and try again:
+
+android-support-v4.jar => com.android.support:support-v4:+
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+* AndroidManifest.xml => app\src\main\AndroidManifest.xml
+* res\ => app\src\main\res\
+* src\ => app\src\main\java\
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

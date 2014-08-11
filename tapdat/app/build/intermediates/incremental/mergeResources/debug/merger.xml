@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merger version="2" >
+
+    <dataSet config="21.0.0-rc1" >
+        <source path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.0-rc1\res" />
+    </dataSet>
+    <dataSet config="main" >
+        <source path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res" >
+            <file
+                name="ic_action_five"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_five.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_one"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_one.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_ten"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_ten.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_three"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_three.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_tip_not_selected"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_tip_not_selected.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_twenty"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_twenty.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_two"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_action_two.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\ic_launcher.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="register_button"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\register_button.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="tda_icon"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-hdpi\tda_icon.png"
+                qualifiers="hdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_five"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_five.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_one"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_one.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_ten"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_ten.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_three"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_three.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_tip_not_selected"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_tip_not_selected.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_twenty"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_twenty.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_two"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_action_two.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\ic_launcher.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="register_button"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\register_button.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="tda_icon"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-mdpi\tda_icon.png"
+                qualifiers="mdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_five"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_five.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_one"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_one.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_ten"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_ten.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_three"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_three.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_tip_not_selected"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_tip_not_selected.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_twenty"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_twenty.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_action_two"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_action_two.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\ic_launcher.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="register_button"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\register_button.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="tda_icon"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xhdpi\tda_icon.png"
+                qualifiers="xhdpi-v4"
+                type="drawable" />
+            <file
+                name="ic_launcher"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\ic_launcher.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="login_button"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\login_button.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="register_button2"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\register_button2.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="start_up"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\start_up.jpg"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="tda_icon"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\tda_icon.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="tda_logo"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\tda_logo.png"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="thank_you"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\thank_you.jpg"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="tip_bg"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\tip_bg.jpg"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="wait_to_tap"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\drawable-xxhdpi\wait_to_tap.jpg"
+                qualifiers="xxhdpi-v4"
+                type="drawable" />
+            <file
+                name="activity_log_in_to_tap"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_log_in_to_tap.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_main"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_main.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_register_to_tap"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_register_to_tap.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_tap_ready"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_tap_ready.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_tip"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_tip.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_tip_success"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_tip_success.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="activity_write_tag"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\layout\activity_write_tag.xml"
+                qualifiers=""
+                type="layout" />
+            <file
+                name="log_in_to_tap"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\log_in_to_tap.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="main"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\main.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="register_to_tap"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\register_to_tap.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="tap_ready"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\tap_ready.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="tip"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\tip.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="tip_success"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\tip_success.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                name="write_tag"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\menu\write_tag.xml"
+                qualifiers=""
+                type="menu" />
+            <file
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\values\dimens.xml"
+                qualifiers="" >
+                <dimen name="activity_vertical_margin" >16dp
+                </dimen>
+                <dimen name="activity_horizontal_margin" >16dp
+                </dimen>
+            </file>
+            <file
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\values\strings.xml"
+                qualifiers="" >
+                <string name="tipAgain" >One More Time!
+                </string>
+                <string name="user_name" >NickName
+                </string>
+                <string name="tip20" >$20 Tip - Ballin
+                </string>
+                <string name="user_email" >Your Email
+                </string>
+                <string name="no_tip" >Select a tip
+                </string>
+                <string name="title_activity_tip" >Tip Amount
+                </string>
+                <string name="user_password" >Password
+                </string>
+                <string name="welcome_title" >Howdy
+                </string>
+                <string name="tipAmountDefault" >$1 Tip!  WOOT!
+                </string>
+                <string name="logo_desc" >TDA Logo
+                </string>
+                <string name="title_activity_write_tag" >WriteTag
+                </string>
+                <string name="login" >Log In
+                </string>
+                <string name="title_activity_tap_ready" >Ready for Dat Tap
+                </string>
+                <string name="hello_world" >Tap Dat!
+                </string>
+                <string name="tip2" >$2 Tip - A shake
+                </string>
+                <string name="tip1" >$1 Tip - Some Fries
+                </string>
+                <string name="register" >Register
+                </string>
+                <string name="tip10" >$10 Tip - A whole lot of fun
+                </string>
+                <string name="user_password_confirmation" >Password Again
+                </string>
+                <string name="action_settings" >Settings
+                </string>
+                <string name="register_disclaimer" >Read our Privacy and Legal Disclaimers on TapDatApp.co
+                </string>
+                <string name="app_name" >Tap Dat
+                </string>
+                <string name="tip_title" >Select Tip Amount
+                </string>
+                <string name="title_activity_log_in_to_tap" >LogInToTap
+                </string>
+                <string name="tip5" >$5 Tip - Burger + Shake
+                </string>
+                <string name="write_tag_button" >write
+                </string>
+                <string name="title_activity_register_to_tap" >RegisterToTap
+                </string>
+                <string name="login_button" >Log In
+                </string>
+                <string name="title_activity_tip_success" >Thanks for the Tap!
+                </string>
+                <string name="tip_button_string" >Tap Dat
+                </string>
+            </file>
+            <file
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\values\styles.xml"
+                qualifiers="" >
+
+                <style
+                    name="AppTheme"
+                    parent="AppBaseTheme" >
+
+                    <!-- All customizations that are NOT specific to a particular API-level can go here. -->
+                </style>
+
+                <style
+                    name="AppBaseTheme"
+                    parent="android:Theme.Light" >
+
+                    <!--
+            Theme customizations available in newer API levels can go in
+            res/values-vXX/styles.xml, while customizations related to
+            backward-compatibility can go here.
+                    -->
+                </style>
+            </file>
+            <file
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\values-sw720dp-land\dimens.xml"
+                qualifiers="sw720dp-land-v13" >
+                <dimen name="activity_horizontal_margin" >128dp
+                </dimen>
+            </file>
+            <file
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\values-v11\styles.xml"
+                qualifiers="v11" >
+
+                <style
+                    name="AppBaseTheme"
+                    parent="android:Theme.Holo.Light" >
+
+                    <!-- API 11 theme customizations can go here. -->
+                </style>
+            </file>
+            <file
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\values-v14\styles.xml"
+                qualifiers="v14" >
+
+                <style
+                    name="AppBaseTheme"
+                    parent="android:Theme.Holo.Light.DarkActionBar" >
+
+                    <!-- API 14 theme customizations can go here. -->
+                </style>
+            </file>
+            <file
+                name="nfc_tech_filter"
+                path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\res\xml\nfc_tech_filter.xml"
+                qualifiers=""
+                type="xml" />
+        </source>
+        <source path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\build\generated\res\rs\debug" />
+        <source path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\build\generated\res\generated\debug" />
+    </dataSet>
+    <dataSet config="debug" >
+        <source path="C:\Users\I836167\Documents\GitHub\TapDatAndroid\tapdat\app\src\debug\res" />
+    </dataSet>
+
+</merger>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.tapdatapp"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-sdk
+        android:minSdkVersion="18"
+        android:targetSdkVersion="18" />
+
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-feature
+        android:name="android.hardware.nfc"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/tda_icon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="co.tapdatapp.MainActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="co.tapdatapp.TipActivity"
+            android:label="@string/title_activity_tip"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="co.tapdatapp.TapReady"
+            android:label="@string/title_activity_tap_ready"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="co.tapdatapp.TipSuccess"
+            android:label="@string/title_activity_tip_success"
+            android:screenOrientation="portrait" >
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <data android:mimeType="tapdat/performer" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="co.tapdatapp.WriteTag"
+            android:label="@string/title_activity_write_tag"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="co.tapdatapp.LogInToTap"
+            android:label="@string/title_activity_log_in_to_tap"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name="co.tapdatapp.RegisterToTap"
+            android:label="@string/title_activity_register_to_tap"
+            android:screenOrientation="portrait" >
+        </activity>
+    </application>
+
+</manifest>
