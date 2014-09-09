@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">TapDatApp</string>
+    <string name="title_activity_home">Tap Dat</string>
+    <string name="dummy_content">TAP DAT</string>
+    <string name="title_activity_acount">Account</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="title_activity_armed">Armed</string>
+    <string name="title_activity_tap_arm">TapArm</string>
+
+</resources>
