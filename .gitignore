@@ -44,3 +44,4 @@ tapdat/.idea/
 .idea/
 tapdat/build/intermediates/model_data.bin
 tapdat/app/build/intermediates/res/debug/xml/nfc_tech_filter.xml
+tapdat/.idea/workspace.xml
