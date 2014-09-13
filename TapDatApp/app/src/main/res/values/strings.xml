@@ -8,5 +8,9 @@
     <string name="dummy_button">Dummy Button</string>
     <string name="title_activity_armed">Armed</string>
     <string name="title_activity_tap_arm">TapArm</string>
+    <string name="title_activity_write">WriteActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="TapToWrite">Tap your Phone to a new Tag</string>
 
 </resources>

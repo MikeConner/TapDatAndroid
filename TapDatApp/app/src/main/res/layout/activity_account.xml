@@ -33,6 +33,14 @@
             android:orientation="horizontal"
             tools:ignore="UselessParent">
 
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Write Tag"
+                android:id="@+id/btnWrite"
+                android:layout_weight="1"
+                android:onClick="startWrite"/>
+
             <Button android:id="@+id/btn_save"
                 style="?metaButtonBarButtonStyle"
                 android:layout_width="0dp"
