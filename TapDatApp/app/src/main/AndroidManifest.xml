@@ -61,15 +61,16 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/title_activity_tap_arm"
             android:screenOrientation="portrait"
+
+            android:parentActivityName=".HomeActivity"
+            android:theme="@style/FullscreenTheme" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-    
+
                 <data android:mimeType="tapdat/performer" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-            android:parentActivityName=".HomeActivity"
-            android:theme="@style/FullscreenTheme" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.tapdat.tapdatapp.HomeActivity" />
