@@ -4,6 +4,7 @@ import co.tapdat.tapdatapp.util.SystemUiHider;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -160,9 +161,15 @@ public class HomeActivity extends Activity {
     }
 
 
-    private String device_id(){
+public void goToSettings (View view){
+    Intent i = new Intent(this, AccountActivity.class);
+    startActivity(i);
+}
 
-        String android_id =  (TelephonyManager) getBaseContext().getSystemService(Context.TELEPHONY_SERVICE);
-        return android_id;
+    public void goToTap (View view){
+        Intent i = new Intent(this, TapArm.class);
+        startActivity(i);
     }
+
+
 }

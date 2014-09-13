@@ -92,13 +92,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Settings"
-                android:id="@+id/btnAccount" />
+                android:id="@+id/btnAccount"
+                android:onClick="goToSettings"/>
 
             <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="TAP DAT"
-                android:id="@+id/btnTap" />
+                android:id="@+id/btnTap"
+                android:onClick="goToTap"/>
 
         </LinearLayout>
 
