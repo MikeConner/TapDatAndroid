@@ -1,3 +1,7 @@
+tapdat/.gradle/*
+tapdat/app/build*
+tapdata/build/*
+
 # built application files
 *.apk
 *.ap_
@@ -20,5 +24,9 @@ local.properties
 .project
 *DS_Store
 tapdat/.idea/*
-tapdat/.gradle/1.12/taskArtifacts/cache.properties.lock
 .idea/*
+*.iml
+tapdat/.gradle/1.12/taskArtifacts/cache.properties.lock
+tapdat/.gradle/1.12/taskArtifacts/cache.properties.lock
+tapdat/.gradle/1.12/taskArtifacts/fileHashes.bin
+tapdat/.gradle/1.12/taskArtifacts/fileSnapshots.bin
