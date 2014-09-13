@@ -31,4 +31,4 @@
         android:onClick="start_write"
         android:text="Start write" />
 
-</LinearLayout><!-- From: file:/C:/Users/arash/Documents/GitHub/TapDatAndroid/tapdat/app/src/main/res/layout/activity_write_tag.xml -->
+</LinearLayout><!-- From: file:/C:/code/TapDapAndroid/tapdat/app/src/main/res/layout/activity_write_tag.xml -->

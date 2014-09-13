@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="C:\Users\arash\Documents\GitHub\TapDatAndroid\tapdat\app\src\main\assets" />
+        <source path="C:\code\TapDapAndroid\tapdat\app\src\main\assets" />
     </dataSet>
     <dataSet config="debug" >
-        <source path="C:\Users\arash\Documents\GitHub\TapDatAndroid\tapdat\app\src\debug\assets" />
+        <source path="C:\code\TapDapAndroid\tapdat\app\src\debug\assets" />
     </dataSet>
 
 </merger>
