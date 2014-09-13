@@ -19,5 +19,6 @@ local.properties
 .classpath
 .project
 *DS_Store
-tapdat/.idea/workspace.xml
+tapdat/.idea/*
 tapdat/.gradle/1.12/taskArtifacts/cache.properties.lock
+.idea/*
