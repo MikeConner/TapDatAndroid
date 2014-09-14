@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import android.content.Intent;
+import android.widget.TextView;
+
 import co.tapdat.tapdatapp.R;
 
 /**
@@ -21,6 +23,8 @@ import co.tapdat.tapdatapp.R;
  * @see SystemUiHider
  */
 public class TapArm extends Activity {
+    float fltAmount = 0;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -181,4 +185,51 @@ public class TapArm extends Activity {
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable, delayMillis);
     }
+
+    public void addOne(View view){
+        fltAmount = fltAmount + 1;
+        TextView txtAmnt = (TextView) findViewById(R.id.txtTipAmnt);
+        txtAmnt.setText( "$" + fltAmount);
+    }
+    public void addFive(View view){
+        fltAmount = fltAmount + 5;
+        TextView txtAmnt = (TextView) findViewById(R.id.txtTipAmnt);
+        txtAmnt.setText( "$" + fltAmount);
+    }
+    public void addTen(View view){
+        fltAmount = fltAmount + 10;
+        TextView txtAmnt = (TextView) findViewById(R.id.txtTipAmnt);
+        txtAmnt.setText( "$" + fltAmount);
+    }
+    public void addTwenty(View view){
+        fltAmount = fltAmount + 20;
+        TextView txtAmnt = (TextView) findViewById(R.id.txtTipAmnt);
+        txtAmnt.setText( "$" + fltAmount);
+    }
+    public void addFifty(View view){
+        fltAmount = fltAmount + 50;
+        TextView txtAmnt = (TextView) findViewById(R.id.txtTipAmnt);
+        txtAmnt.setText( "$" + fltAmount);
+    }
+    public void addHundred(View view){
+        fltAmount = fltAmount + 100;
+        TextView txtAmnt = (TextView) findViewById(R.id.txtTipAmnt);
+        txtAmnt.setText( "$" + fltAmount);
+    }
+    public void armOrSend(View view){
+        //if in armin mode
+        Intent i = new Intent(this, Armed.class);
+        i.putExtra("TIPAMOUNT",  fltAmount);
+
+        startActivity(i);
+
+        //else, if we came here after a tap
+
+    }
+
+
+
+
+
+
 }

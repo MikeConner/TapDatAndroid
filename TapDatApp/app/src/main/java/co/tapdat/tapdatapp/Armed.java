@@ -12,6 +12,8 @@ import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 import co.tapdat.tapdatapp.R;
+import android.content.Intent;
+import android.widget.TextView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -20,6 +22,7 @@ import co.tapdat.tapdatapp.R;
  * @see SystemUiHider
  */
 public class Armed extends Activity {
+    public String strTipAmnt = "...";
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -51,6 +54,15 @@ public class Armed extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //get message from intent
+        Intent i = getIntent();
+        float fltDefault = 1;
+
+        //= i.getStringExtra("TIPAMOUNT");
+        String message  = Float.toString( i.getFloatExtra("TIPAMOUNT",fltDefault)) ;
+        strTipAmnt = message.toString();
+
 
         setContentView(R.layout.activity_armed);
         setupActionBar();
@@ -121,7 +133,8 @@ public class Armed extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
+        TextView txtViewArmed = (TextView) findViewById(R.id.txtAmountArmed);
+        txtViewArmed.setText(strTipAmnt);
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.

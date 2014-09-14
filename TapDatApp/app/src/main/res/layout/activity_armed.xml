@@ -40,9 +40,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="ARMED : $10 \n READY TO TAP"
+            android:text="ARMED \n READY TO TAP"
             android:id="@+id/textView"
             android:layout_gravity="left|top" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="..."
+            android:id="@+id/txtAmountArmed"
+            android:layout_gravity="center"
+            android:background="#ffff081f"
+            android:textAlignment="center"
+            android:textSize="56dp"
+            android:gravity="center_horizontal" />
     </FrameLayout>
 
 </FrameLayout>
