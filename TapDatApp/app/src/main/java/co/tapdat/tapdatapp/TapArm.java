@@ -24,6 +24,9 @@ import co.tapdat.tapdatapp.R;
  */
 public class TapArm extends Activity {
     float fltAmount = 0;
+    String strTagID = "";
+    float fltTipAmount = -1;
+    String strTipMessage = "";
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -62,6 +65,11 @@ public class TapArm extends Activity {
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
+
+        Intent i = getIntent();
+        float fltDefault = 1;
+        strTipMessage  = Float.toString( i.getFloatExtra("TIPAMOUNT",fltDefault)) ;
+        strTagID = i.getStringExtra("TAGID");
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -117,7 +125,8 @@ public class TapArm extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
+        TextView txtAfterTap = (TextView) findViewById(R.id.txtAfterTap);
+        txtAfterTap.setText("You Just TIPPED " + strTipMessage + ".  Much appreciated by: " + strTagID);
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
