@@ -1,10 +1,28 @@
 package co.tapdat.tapdatapp;
 
 import co.tapdat.tapdatapp.util.SystemUiHider;
+import co.tapdat.tapdatapp.util.UrlJsonAsyncTask;
+import co.tapdat.tapdatapp.util.JsonHelper;
+
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONArray;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.ArrayList;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +30,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.provider.Settings.Secure;
 import co.tapdat.tapdatapp.R;
-
+import android.net.NetworkInfo;
+import android.net.ConnectivityManager;
+import android.widget.Toast;
+import android.util.Log;
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
@@ -20,6 +41,12 @@ import co.tapdat.tapdatapp.R;
  * @see SystemUiHider
  */
 public class HomeActivity extends Activity {
+    private static final String TASKS_URL = "http://10.0.2.2:3000/api/v1/tasks.json";
+    private final static String LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/sessions.json";
+    private SharedPreferences mPreferences;
+    private String mUserEmail;
+    private String mUserPassword;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -56,7 +83,16 @@ public class HomeActivity extends Activity {
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
+        boolean b =  isNetworkAvailable();
+        if (b) {
+            //ToastThis( "Yup, we gotz da net");
 
+        } else
+        {
+            ToastThis( "FML.  No Net");
+        }
+        mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+//        loadTasksFromAPI(TASKS_URL);
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
         mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
@@ -171,5 +207,164 @@ public void goToSettings (View view){
         startActivity(i);
     }
 
+    public boolean isNetworkAvailable() {
+        ConnectivityManager cm = (ConnectivityManager)
+                getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+        // if no network is available networkInfo will be null
+        // otherwise check if we are connected
+        if (networkInfo != null && networkInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+    public void ToastThis(String strToastin){
+
+        Context context = getApplicationContext();
+        CharSequence text = strToastin;
+        int duration = Toast.LENGTH_SHORT;
+
+        Toast toast = Toast.makeText(context, text, duration);
+        toast.show();
+    }
+
+
+
+
+    private void loadTasksFromAPI(String url) {
+        GetTasksTask getTasksTask = new GetTasksTask(HomeActivity.this);
+        getTasksTask.setMessageLoading("Loading tasks...");
+        getTasksTask.execute(url);
+    }
+
+    private class GetTasksTask extends  UrlJsonAsyncTask {
+        public GetTasksTask(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            try {
+                JSONArray jsonTasks = json.getJSONObject("data").getJSONArray("tasks");
+                int length = jsonTasks.length();
+                List<String> tasksTitles = new ArrayList<String>(length);
+
+                for (int i = 0; i < length; i++) {
+                    tasksTitles.add(jsonTasks.getJSONObject(i).getString("title"));
+                }
+                ToastThis( tasksTitles.toString());
+
+                //ListView tasksListView = (ListView) findViewById (R.id.tasks_list_view);
+                //if (tasksListView != null) {
+                //    tasksListView.setAdapter(new ArrayAdapter<String>(HomeActivity.this,
+                 //           android.R.layout.simple_list_item_1, tasksTitles));
+                //}
+            } catch (Exception e) {
+                Toast.makeText(context, e.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            } finally {
+                super.onPostExecute(json);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mPreferences.contains("AuthToken")) {
+            loadTasksFromAPI(TASKS_URL);
+        } else {
+            mUserEmail = "user@example.com";
+            mUserPassword = "secret";
+            LoginTask loginTask = new LoginTask(HomeActivity.this);
+            loginTask.setMessageLoading("Logging in...");
+            loginTask.execute(LOGIN_API_ENDPOINT_URL);
+        //    Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
+        //   startActivityForResult(intent, 0);
+        ToastThis( "NO AUTH BITCHES!");
+        }
+    }
+
+    private class LoginTask extends UrlJsonAsyncTask {
+        public LoginTask(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... urls) {
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(urls[0]);
+            JSONObject holder = new JSONObject();
+            JSONObject userObj = new JSONObject();
+            String response = null;
+            JSONObject json = new JSONObject();
+
+            try {
+                try {
+                    // setup the returned values in case
+                    // something goes wrong
+                    json.put("success", false);
+                    json.put("info", "Something went wrong. Retry!");
+                    // add the user email and password to
+                    // the params
+                    userObj.put("email", mUserEmail);
+                    userObj.put("password", mUserPassword);
+                    holder.put("user", userObj);
+                    StringEntity se = new StringEntity(holder.toString());
+                    post.setEntity(se);
+
+                    // setup the request headers
+                    post.setHeader("Accept", "application/json");
+                    post.setHeader("Content-Type", "application/json");
+
+                    ResponseHandler<String> responseHandler = new BasicResponseHandler();
+                    response = client.execute( post, responseHandler);
+                    json = new JSONObject(response);
+
+                } catch (HttpResponseException e) {
+                    e.printStackTrace();
+                    Log.e("ClientProtocol", "" + e);
+                    json.put("info", "Email and/or password are invalid. Retry!");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Log.e("IO", "" + e);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("JSON", "" + e);
+            }
+
+            return json;
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            try {
+                if (json.getBoolean("success")) {
+                    // everything is ok
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    // save the returned auth_token into
+                    // the SharedPreferences
+                    editor.putString("AuthToken", json.getJSONObject("data").getString("auth_token"));
+                    editor.commit();
+
+                    // launch the HomeActivity and close this one
+                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                    startActivity(intent);
+                    finish();
+                }
+                Toast.makeText(context, json.getString("info"), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                // something went wrong: show a Toast
+                // with the exception message
+                Toast.makeText(context, e.getMessage(), Toast.LENGTH_LONG).show();
+            } finally {
+                super.onPostExecute(json);
+            }
+        }
+    }
+
 
 }
+
