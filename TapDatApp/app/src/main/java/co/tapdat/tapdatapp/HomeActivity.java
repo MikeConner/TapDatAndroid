@@ -63,25 +63,23 @@ public class HomeActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
         setContentView(R.layout.activity_home);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.fullscreen_content);
 
 
+//TAP CODE
+        mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
+        mTapUser = new TapUser();
+
         boolean bNetwork =   isNetworkAvailable();
         if (bNetwork) {
             //ToastThis( "Yup, we gotz da net");
-
-
-
         } else
         {
             ToastThis( "FML.  No Net");
         }
-
-//        loadTasksFromAPI(TASKS_URL);
 //END OF CUSTOM CODE
 
 
@@ -148,9 +146,6 @@ public class HomeActivity extends Activity {
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-
-
-
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
@@ -191,6 +186,44 @@ public class HomeActivity extends Activity {
     }
 
 
+
+
+@Override
+public void onResume() {
+    super.onResume();
+
+    if (!mPreferences.contains("AuthToken"))  {
+
+//START OF CUSTOM CODE
+        if( mPreferences.contains("PhoneSecret") ){
+            mPhoneSecret = mPreferences.getString("PhoneSecret", "");
+        }
+        else{
+
+            mTapUser.GeneratePhoneSecret(HomeActivity.this);
+            mPhoneSecret = mPreferences.getString("PhoneSecret", "");
+            mTapUser.CreateUser(HomeActivity.this);
+
+        }
+        mAuthToken = mPreferences.getString("AuthToken", "");
+        ToastThis(mAuthToken);
+        mTapUser.LoadUser(HomeActivity.this, mAuthToken);
+ //       ToastThis(mTapUser.getNickname());
+        //get balance
+
+        //  loadTasksFromAPI(TASKS_URL);
+        //we're good to go
+
+    }
+    else {
+        mAuthToken = mPreferences.getString("AuthToken", "");
+        mTapUser.LoadUser(HomeActivity.this, mAuthToken);
+        //go get a new auth
+    }
+
+
+}
+
 public void goToSettings (View view){
     Intent i = new Intent(this, AccountActivity.class);
     startActivity(i);
@@ -202,102 +235,28 @@ public void goToTap (View view){
 }
 
 
+
 public void ToastThis(String strToastin){
 
-    Context context = getApplicationContext();
-    CharSequence text = strToastin;
-    int duration = Toast.LENGTH_SHORT;
+Context context = getApplicationContext();
+CharSequence text = strToastin;
+int duration = Toast.LENGTH_SHORT;
 
-    Toast toast = Toast.makeText(context, text, duration);
-    toast.show();
-}
-
-private void loadTasksFromAPI(String url) {
-    GetTasksTask getTasksTask = new GetTasksTask(HomeActivity.this);
-    getTasksTask.setMessageLoading("Loading tasks...");
-    getTasksTask.execute(url);
-}
-
-private class GetTasksTask extends  UrlJsonAsyncTask {
-    public GetTasksTask(Context context) {
-        super(context);
-    }
-
-    @Override
-    protected void onPostExecute(JSONObject json) {
-        try {
-            JSONArray jsonTasks = json.getJSONObject("data").getJSONArray("tasks");
-            int length = jsonTasks.length();
-            List<String> tasksTitles = new ArrayList<String>(length);
-
-            for (int i = 0; i < length; i++) {
-                tasksTitles.add(jsonTasks.getJSONObject(i).getString("title"));
-            }
-            ToastThis( tasksTitles.toString());
-
-            //ListView tasksListView = (ListView) findViewById (R.id.tasks_list_view);
-            //if (tasksListView != null) {
-            //    tasksListView.setAdapter(new ArrayAdapter<String>(HomeActivity.this,
-             //           android.R.layout.simple_list_item_1, tasksTitles));
-            //}
-        } catch (Exception e) {
-            Toast.makeText(context, e.getMessage(),
-                    Toast.LENGTH_LONG).show();
-        } finally {
-            super.onPostExecute(json);
-        }
-    }
-}
-
-@Override
-public void onResume() {
-    super.onResume();
-
-    if (mPreferences.contains("AuthToken")) {
-        //get balance
-
-        //  loadTasksFromAPI(TASKS_URL);
-        //we're good to go
-    } else {
-
-//START OF CUSTOM CODE
-        if( mPreferences.contains("PhoneSecret") ){
-            mPhoneSecret = mPreferences.getString("PhoneSecret", "");
-        }
-        else{
-            mTapUser = new TapUser();
-            mTapUser.GeneratePhoneSecret(HomeActivity.this);
-            mPhoneSecret = mPreferences.getString("PhoneSecret", "");
-            mTapUser.CreateUser(HomeActivity.this);
-            mAuthToken = mPreferences.getString("AuthToken", "");
-
-//REMOVEme!
-            ToastThis("Creating new User" + mAuthToken);
-
-        }
-        // launch the HomeActivity and close this one
-        //Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-        //startActivity(intent);
-        //finish();
-    }
+Toast toast = Toast.makeText(context, text, duration);
+toast.show();
 }
 
 
-
-
-
-
-
-    public boolean isNetworkAvailable() {
-        ConnectivityManager cm = (ConnectivityManager)
-                getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = cm.getActiveNetworkInfo();
-        // if no network is available networkInfo will be null
-        // otherwise check if we are connected
-        if (networkInfo != null && networkInfo.isConnected()) {
-            return true;
-        }
-        return false;
+public boolean isNetworkAvailable() {
+    ConnectivityManager cm = (ConnectivityManager)
+            getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo networkInfo = cm.getActiveNetworkInfo();
+    // if no network is available networkInfo will be null
+    // otherwise check if we are connected
+    if (networkInfo != null && networkInfo.isConnected()) {
+        return true;
     }
+    return false;
+}
 }
 

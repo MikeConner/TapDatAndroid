@@ -12,10 +12,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -25,9 +28,12 @@ public class TapUser {
 
     private String mUserEmail;
     private String mNickName;
-    private String mWithDrawAddress;
+    private String mOutboundBTCaddress;
     private int mBalance;
     private String mPhoneSecret;
+    private String mInboundBTCaddress;
+    private String mAuthToken;
+
 
     // something to hold a picture
 
@@ -37,8 +43,38 @@ public class TapUser {
     private final static String LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/sessions.json";
     private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/registrations.json";
     private final static String TAP_LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/sessions.json";
-
+    private final static String TAP_USER_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/users/me";
     private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
+
+    public String getNickname(){
+
+        return mNickName;
+    }
+    public void setNickName(String mNewNickname){
+        mNickName = mNewNickname;
+        this.UpdateUser();
+    }
+    public String getEmail(){
+        return mUserEmail;
+    }
+    public void setEmail(String mNewEmail){
+        mUserEmail = mNewEmail;
+        this.UpdateUser();
+    }
+    public String getBTCinbound(){
+        return mInboundBTCaddress;
+    }
+    public void setBTCinbound(String mNewBTCinBound){
+        mInboundBTCaddress = mNewBTCinBound;
+        this.UpdateUser();
+    }
+    public String getBTCoutbound(){
+        return mOutboundBTCaddress;
+    }
+    public void setBTCoutbound(String mNewBTCoutbound){
+        mOutboundBTCaddress = mNewBTCoutbound;
+        this.UpdateUser();
+    }
 
     public static String getRandomString(final int sizeOfRandomString)
     {
@@ -65,36 +101,42 @@ public class TapUser {
         RegisterTask registerTask = new RegisterTask(mContext);
         registerTask.setMessageLoading("Registering new account...");
         registerTask.execute(TAP_REGISTER_API_ENDPOINT_URL);
-        return "boooya";
+        return "Success";
     }
 
-    public String GetAuthToken(String mPhoneSecret, Context mContext){
+    public boolean   GetAuthToken(String mPhoneSecret, Context mContext){
         LoginTask loginTask = new LoginTask(mContext);
         loginTask.setMessageLoading("Logging in...");
         loginTask.execute(LOGIN_API_ENDPOINT_URL);
         //    Intent intent = new Intent(HomeActivity.this, WelcomeActivity.class);
         //   startActivityForResult(intent, 0);
 
-        return "483993";
+        return true;
 
     }
+
+
+
+    public boolean LoadUser(Context mContext, String mAuthToken){
+        mPreferences = mContext.getSharedPreferences("CurrentUser", mContext.MODE_PRIVATE);
+        GetUserInfo mUserInfo = new GetUserInfo(mContext);
+        mUserInfo.setMessageLoading("Loading User...");
+        mUserInfo.execute(TAP_USER_API_ENDPOINT_URL + "?auth_token=" + mAuthToken);
+        return true;
+    }
+
 
     public boolean UpdateUser(){
 
         return true;
     }
-    public boolean LoadUser(){
-        return true;
-    }
-    public int GetBalance(){
-        return 15;
 
-    }
     public String NewNetNickName(){
-
         return "soggy banana";
-
     }
+
+
+
     private class LoginTask extends UrlJsonAsyncTask {
         public LoginTask(Context context) {
             super(context);
@@ -218,24 +260,26 @@ public class TapUser {
                 Log.e("JSON", "" + e);
             }
 
+
             return json;
         }
 
         @Override
         protected void onPostExecute(JSONObject json) {
             try {
-                if (json.getBoolean("success")) {
+                if (!json.getString("response").isEmpty()) {
                     // everything is ok
                     SharedPreferences.Editor editor = mPreferences.edit();
                     // save the returned auth_token into
                     // the SharedPreferences
-                    editor.putString("AuthToken", json.getJSONObject("data").getString("auth_token"));
+                    editor.putString("AuthToken", json.getJSONObject("response").getString("auth_token"));
+                    editor.putString("NickName", json.getJSONObject("response").getString("nickname"));
                     editor.commit();
 
                     // launch the HomeActivity and close this one
 
                 }
-                Toast.makeText(context, json.getString("info"), Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, json.getString("info"), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 // something went wrong: show a Toast
                 // with the exception message
@@ -246,5 +290,32 @@ public class TapUser {
         }
     }
 
+
+
+
+
+
+
+    private class GetUserInfo extends UrlJsonAsyncTask {
+        public GetUserInfo(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject json) {
+            try {
+                mNickName = json.getJSONObject("response").getString("nickname");
+                mInboundBTCaddress = json.getJSONObject("response").getString("inbound_btc_address");
+                mOutboundBTCaddress = json.getJSONObject("response").getString("outbound_btc_address");
+                mBalance = json.getJSONObject("response").getInt("satoshi_balance");
+                mUserEmail = json.getJSONObject("response").getString("email");
+            } catch (Exception e) {
+                Toast.makeText(context, e.getMessage(),
+                        Toast.LENGTH_LONG).show();
+            } finally {
+                super.onPostExecute(json);
+            }
+        }
+    }
 
 }
