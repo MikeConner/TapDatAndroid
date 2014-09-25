@@ -49,11 +49,19 @@
                 android:id="@+id/txtBalance"
                 android:textAlignment="center" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="loadit"
+                android:onClick="loadit"
+                android:id="@+id/btn1"
+                android:layout_gravity="right" />
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Confirmations: 2"
+                android:text="Nickname!"
                 android:id="@+id/txtConfirmations"
                 android:textAlignment="center" />
 
@@ -62,6 +70,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/progressBar2" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="NickIt"
+                android:id="@+id/btn2"
+                android:onClick="newNick"
+                android:layout_gravity="right" />
 
             <ImageView
                 android:layout_width="wrap_content"

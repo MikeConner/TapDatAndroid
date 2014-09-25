@@ -13,6 +13,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONArray;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.List;
@@ -33,6 +34,7 @@ import android.provider.Settings.Secure;
 import co.tapdat.tapdatapp.R;
 import android.net.NetworkInfo;
 import android.net.ConnectivityManager;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Log;
 /**
@@ -192,13 +194,12 @@ public class HomeActivity extends Activity {
 public void onResume() {
     super.onResume();
 
-    if (!mPreferences.contains("AuthToken"))  {
+    if (!mPreferences.contains("AuthToken")) {
 
 //START OF CUSTOM CODE
-        if( mPreferences.contains("PhoneSecret") ){
+        if (mPreferences.contains("PhoneSecret")) {
             mPhoneSecret = mPreferences.getString("PhoneSecret", "");
-        }
-        else{
+        } else {
 
             mTapUser.GeneratePhoneSecret(HomeActivity.this);
             mPhoneSecret = mPreferences.getString("PhoneSecret", "");
@@ -208,24 +209,37 @@ public void onResume() {
         mAuthToken = mPreferences.getString("AuthToken", "");
         ToastThis(mAuthToken);
         mTapUser.LoadUser(HomeActivity.this, mAuthToken);
- //       ToastThis(mTapUser.getNickname());
+        //       ToastThis(mTapUser.getNickname());
         //get balance
 
         //  loadTasksFromAPI(TASKS_URL);
         //we're good to go
 
-    }
-    else {
+    } else {
         mAuthToken = mPreferences.getString("AuthToken", "");
         mTapUser.LoadUser(HomeActivity.this, mAuthToken);
+
+
         //go get a new auth
     }
+}
+public void loadit(View view){
 
 
+        TextView txt1 = (TextView) findViewById(R.id.txtConfirmations);
+        txt1.setText(mTapUser.getNickname());
+        TextView txt2 = (TextView) findViewById(R.id.txtLoadAddress);
+        txt2.setText(mTapUser.getBTCinbound());
 }
 
+    public void newNick(View view){
+        mTapUser.NewNetNickName(HomeActivity.this, mAuthToken);
+
+
+    }
 public void goToSettings (View view){
     Intent i = new Intent(this, AccountActivity.class);
+    i.putExtra("AuthToken", mAuthToken);
     startActivity(i);
 }
 

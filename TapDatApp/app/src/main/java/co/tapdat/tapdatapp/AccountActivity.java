@@ -1,6 +1,7 @@
 package co.tapdat.tapdatapp;
 
 import co.tapdat.tapdatapp.util.SystemUiHider;
+import co.tapdat.tapdatapp.util.TapUser;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -22,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -38,6 +40,8 @@ public class AccountActivity extends Activity {
     boolean mWriteMode = false;
     private NfcAdapter mNfcAdapter;
     private PendingIntent mNfcPendingIntent;
+    private String mAuthToken;
+    private TapUser mTapUser;
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -70,7 +74,12 @@ public class AccountActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Intent intent = getIntent();
+        mAuthToken = intent.getStringExtra("AuthToken");
+        mTapUser = new TapUser();
+        if (!mAuthToken.isEmpty()) {
+            mTapUser.LoadUser(AccountActivity.this, mAuthToken);
+        }
         setContentView(R.layout.activity_account);
         setupActionBar();
 
@@ -136,7 +145,30 @@ public class AccountActivity extends Activity {
         // while interacting with the UI.
        // findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
     }
+public void loadit(View view){
+    EditText mEmail = (EditText) findViewById(R.id.txtEmailAddy);
+    mEmail.setText(mTapUser.getEmail());
 
+    EditText mBTCout = (EditText) findViewById(R.id.txtBTCoutbound);
+    mBTCout.setText(mTapUser.getBTCoutbound());
+
+    EditText mNickName = (EditText) findViewById(R.id.txtNickname);
+    mNickName.setText(mTapUser.getNickname());
+}
+
+    public void newTag(View view) {
+
+
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
+
+
+
+    }
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);

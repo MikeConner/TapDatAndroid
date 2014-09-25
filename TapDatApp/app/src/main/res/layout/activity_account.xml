@@ -41,12 +41,13 @@
                 android:layout_weight="1"
                 android:onClick="startWrite"/>
 
-            <Button android:id="@+id/btn_save"
+            <Button android:id="@+id/btnNewTag"
                 style="?metaButtonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Save" />
+                android:text="Add Tag"
+                android:onClick="newTag"/>
 
         </LinearLayout>
 
@@ -55,6 +56,15 @@
             android:layout_width="fill_parent"
             android:layout_height="479dp"
             android:layout_gravity="left|top">
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="load"
+                android:id="@+id/btnLoad"
+                android:layout_gravity="right"
+                android:onClick="loadit"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -84,12 +94,13 @@
                 android:text="Withdraw"
                 android:id="@+id/btnWithdraw" />
 
-            <TextView
+            <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Transaction history"
-                android:id="@+id/txtTransactions" />
+                android:id="@+id/listTags"
+                android:layout_gravity="center_horizontal"
+                android:choiceMode="singleChoice" />
+
         </LinearLayout>
     </FrameLayout>
 
