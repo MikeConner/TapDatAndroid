@@ -59,7 +59,7 @@ public class Arm extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Toast.makeText(getActivity(), (CharSequence) ("Howdy arm"), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), (CharSequence) ("Howdy arm"), Toast.LENGTH_SHORT).show();
     }
 
     @Override

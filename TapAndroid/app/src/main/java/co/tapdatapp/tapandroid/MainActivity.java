@@ -7,14 +7,17 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
@@ -95,11 +98,21 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         Boolean mNetwork = mTapCloud.isNetworkAvailable(this);
         if (mNetwork) {
 
-            if (mPreferences.contains("AuthToken")){
-                mAuthToken = mPreferences.getString("AuthToken", "");
+            if (mPreferences.contains("AuthToken")) {
+                if (!mPreferences.getString("AuthToken", "").isEmpty()){
+                    mAuthToken = mPreferences.getString("AuthToken", "");
                 mTapUser.LoadUser(mAuthToken);
                 //TODO: Failure case for when auth token has expired -> get error, get new auth token based on secret
+            }
+                else {
+                    mAuthToken =  mTapUser.CreateUser(mPhoneSecret);
+                    SharedPreferences.Editor editor = mPreferences.edit();
+                    editor.putString("AuthToken", mAuthToken);
+                    editor.putString("NickName", mTapUser.getNickname());
+                    editor.commit();
 
+
+                }
             }
             else{
                 //Get Auth Token
@@ -223,6 +236,23 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         // we need this for fragments / menus
         //not sure what we have to do here if anything
     }
+    public void getImage(View view){
 
+       // Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+      //  startActivityForResult(takePicture, 0);//zero can be replaced with any action code
+
+        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+    }
+
+
+    public void myTags(View view){
+        Tags mTags = new Tags();
+        Intent i = new Intent(this,TagActivity.class);
+        i.putExtra("AuthToken", mAuthToken);
+        startActivity(i);
+
+    }
 
 }

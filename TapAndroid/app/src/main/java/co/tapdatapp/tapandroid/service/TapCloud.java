@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.widget.BaseAdapter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -159,4 +160,5 @@ public class TapCloud {
         }
         return false;
     }
+
 }

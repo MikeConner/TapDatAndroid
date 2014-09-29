@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
@@ -131,6 +133,33 @@ public class TapUser {
         }
         return mAuthToken;
     }
+
+    public Map<String, String> getTags(String auth_token){
+        mAuthToken = auth_token;
+        String mURL = TAP_TAGS_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+        mTapCloud = new TapCloud();
+        JSONObject output = new JSONObject();
+        try {
+            output = mTapCloud.httpGet(mURL);
+            JSONArray jsonTags = output.getJSONArray("response");
+            int length = jsonTags.length();
+
+            mtagMap = new HashMap<String, String>();
+
+            for (int i = 0; i < length; i++) {
+                mtagMap.put(jsonTags.getJSONObject(i).getString("id"), jsonTags.getJSONObject(i).getString("name"));
+            }
+
+
+        }
+        catch (Exception e)
+        {
+            //TODO: any errors possible here?
+        }
+        return mtagMap;
+    }
+
     public void UpdateUser(){
 
     }

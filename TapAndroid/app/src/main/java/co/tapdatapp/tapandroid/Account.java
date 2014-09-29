@@ -1,10 +1,13 @@
 package co.tapdatapp.tapandroid;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +64,7 @@ public class Account extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        Toast.makeText(getActivity(), (CharSequence)("Howdy Account"), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), (CharSequence)("Howdy Account"), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -110,5 +113,6 @@ public class Account extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+
 
 }
