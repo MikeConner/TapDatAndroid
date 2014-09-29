@@ -79,6 +79,8 @@ public class AccountActivity extends Activity {
         mTapUser = new TapUser();
         if (!mAuthToken.isEmpty()) {
             mTapUser.LoadUser(AccountActivity.this, mAuthToken);
+            mTapUser.loadTags(AccountActivity.this, mAuthToken);
+
         }
         setContentView(R.layout.activity_account);
         setupActionBar();

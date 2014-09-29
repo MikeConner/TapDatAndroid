@@ -44,8 +44,8 @@ import android.util.Log;
  * @see SystemUiHider
  */
 public class HomeActivity extends Activity {
-    private static final String TASKS_URL = "http://10.0.2.2:3000/api/v1/tasks.json";
-    private final static String LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/sessions.json";
+//    private static final String TASKS_URL = "http://10.0.2.2:3000/api/v1/tasks.json";
+//    private final static String LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/sessions.json";
 
 
     private SharedPreferences mPreferences;
@@ -234,8 +234,6 @@ public void loadit(View view){
 
     public void newNick(View view){
         mTapUser.NewNetNickName(HomeActivity.this, mAuthToken);
-
-
     }
 public void goToSettings (View view){
     Intent i = new Intent(this, AccountActivity.class);
