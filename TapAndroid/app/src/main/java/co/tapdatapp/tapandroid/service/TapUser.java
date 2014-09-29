@@ -38,7 +38,6 @@ public class TapUser {
     public String CreateUser (String phone_secret){
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
-
         //END
 
         mPhoneSecret = phone_secret;
@@ -79,6 +78,58 @@ public class TapUser {
             //TODO: any errors possible here?
         }
 
+    }
+
+    public String getNewNickname(String auth_token){
+        mAuthToken = auth_token;
+        JSONObject user = new JSONObject();
+        JSONObject json = new JSONObject();
+        JSONObject output;
+
+        String mURL = TAP_USERNICK_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+        mTapCloud = new TapCloud();
+
+        try {
+
+            user.put("auth_token", mAuthToken);
+            json.put("user", user);
+            //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
+            output = mTapCloud.httpPut(mURL, json);
+            mNickName = output.getJSONObject("response").getString("nickname");
+
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSON", "" + e);
+        }
+        return mNickName;
+    }
+
+    public String getNewAuthToken(String phone_secret){
+        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+        mTapCloud = new TapCloud();
+        //END
+
+        mPhoneSecret = phone_secret;
+        JSONObject user = new JSONObject();
+        JSONObject json = new JSONObject();
+        JSONObject output;
+        try {
+            user.put("phone_secret_key", phone_secret);
+            json.put("user", user);
+            //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
+
+            //TODO: Update this to session controller instead of registration controller
+            output = mTapCloud.httpPost(TAP_REGISTER_API_ENDPOINT_URL, json);
+            mAuthToken = output.getJSONObject("response").getString("auth_token");
+            mNickName = output.getJSONObject("response").getString("nickname");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSON", "" + e);
+        }
+        return mAuthToken;
     }
     public void UpdateUser(){
 

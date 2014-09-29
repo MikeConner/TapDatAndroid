@@ -115,6 +115,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
                 //TODO: Delete Auth Token on kill of application, so it gets a new one when it comes back
             }
+            mTapUser.getNewNickname(mAuthToken);
 
 
 
