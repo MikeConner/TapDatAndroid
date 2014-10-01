@@ -79,7 +79,6 @@ public class TapUser {
         {
             //TODO: any errors possible here?
         }
-
     }
 
     public String getNewNickname(String auth_token){
@@ -160,8 +159,35 @@ public class TapUser {
         return mtagMap;
     }
 
-    public void UpdateUser(){
+    public void UpdateUser(String auth_token, String new_nickname, String new_email_address, String new_outbound_btc_address){
+        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+        mTapCloud = new TapCloud();
+        //END
 
+        mAuthToken = auth_token;
+        mNickName = new_nickname;
+        mUserEmail = new_email_address;
+        mOutboundBTCaddress = new_outbound_btc_address;
+
+        JSONObject user = new JSONObject();
+        JSONObject json = new JSONObject();
+        JSONObject output;
+        try {
+            user.put("email", mUserEmail);
+            user.put("name", mNickName);
+            user.put("outbound_btc_address", mOutboundBTCaddress);
+
+            json.put("user", user);
+            //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
+            output = mTapCloud.httpPost(TAP_REGISTER_API_ENDPOINT_URL + "?auth_token=" + mAuthToken, json);
+//            mAuthToken = output.getJSONObject("response").getString("auth_token");
+//            mNickName = output.getJSONObject("response").getString("nickname");
+            Log.e("bob","bob");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSON", "" + e);
+        }
     }
 
     public String getNickname(){
@@ -170,28 +196,28 @@ public class TapUser {
     }
     public void setNickName(String mNewNickname){
         mNickName = mNewNickname;
-        this.UpdateUser();
+        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
     public String getEmail(){
         return mUserEmail;
     }
     public void setEmail(String mNewEmail){
         mUserEmail = mNewEmail;
-        this.UpdateUser();
+        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
     public String getBTCinbound(){
         return mInboundBTCaddress;
     }
     public void setBTCinbound(String mNewBTCinBound){
         mInboundBTCaddress = mNewBTCinBound;
-        this.UpdateUser();
+        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
     public String getBTCoutbound(){
         return mOutboundBTCaddress;
     }
     public void setBTCoutbound(String mNewBTCoutbound){
         mOutboundBTCaddress = mNewBTCoutbound;
-        this.UpdateUser();
+        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
 
 

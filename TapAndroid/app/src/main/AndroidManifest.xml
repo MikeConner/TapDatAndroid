@@ -32,6 +32,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="co.tapdatapp.tapandroid.MainActivity" />
         </activity>
+        <activity
+            android:name=".WriteActivity"
+            android:label="@string/title_activity_write"
+            android:parentActivityName=".TagActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="co.tapdatapp.tapandroid.TagActivity" />
+        </activity>
     </application>
 
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -40,7 +48,9 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
     <uses-feature
         android:name="android.hardware.nfc"

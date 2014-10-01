@@ -18,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
@@ -40,6 +41,15 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     private TapTxn mTapTxn;
     private TapCloud mTapCloud;
 
+    private Account mAccountFrag;
+    private Fragment mHistoryFrag;
+    private Fragment mTapFrag;
+
+
+    public TapUser getUserContext(){
+        return mTapUser;
+
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         StrictMode.ThreadPolicy tp = StrictMode.ThreadPolicy.LAX;
@@ -125,7 +135,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
                 //We know user is null, but let's load user anyway to be consistent with above
                 mTapUser.LoadUser(mAuthToken);
-
+               // mAccountFrag.setTapUser(mTapUser);
                 //TODO: Delete Auth Token on kill of application, so it gets a new one when it comes back
             }
          //   mTapUser.getNewNickname(mAuthToken);
@@ -142,7 +152,9 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     @Override
     public void onResume(){
         super.onResume();
-        Toast.makeText(this, (CharSequence) (mTapUser.getNickname()), Toast.LENGTH_SHORT).show();
+      //  Toast.makeText(this, (CharSequence) (mTapUser.getNickname()), Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override
@@ -197,12 +209,15 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
             switch (position) {
                 case 0:
                     frag = new Account().newInstance("1","2");
+                    //frag = mAccountFrag;
                     break;
                 case 1:
                     frag = new Arm().newInstance("1","2");
+                   // frag = mTapFrag;
                     break;
                 case 2:
                     frag = new History().newInstance("1","2");
+                    //frag = mHistoryFrag ;
                     break;
 
                 default: throw new IllegalArgumentException("Invalid Section Number");
@@ -252,6 +267,19 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         Intent i = new Intent(this,TagActivity.class);
         i.putExtra("AuthToken", mAuthToken);
         startActivity(i);
+
+    }
+    public void newNickNameMe(View view){
+        EditText et = (EditText) findViewById(R.id.etNickName);
+        et.setText(        mTapUser.getNewNickname(mAuthToken));
+
+    }
+    public void writeUser(View view){
+        EditText edName = (EditText) findViewById(R.id.etNickName);
+        EditText edEmail = (EditText) findViewById(R.id.etEmail);
+        EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
+
+        mTapUser.UpdateUser(mAuthToken, edName.getText().toString(),edEmail.getText().toString(), edWithDraw.getText().toString());
 
     }
 

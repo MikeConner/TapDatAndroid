@@ -1,6 +1,8 @@
 package co.tapdatapp.tapandroid;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,7 +24,7 @@ import co.tapdatapp.tapandroid.service.TapTag;
 import co.tapdatapp.tapandroid.service.TapUser;
 
 
-public class TagActivity extends Activity implements Tags.OnFragmentInteractionListener{
+public class TagActivity extends Activity implements Tags.OnFragmentInteractionListener {
     private String mAuthToken;
     private TapUser mTapUser;
     private TapTag mTapTag;
@@ -48,6 +50,11 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                     Toast.makeText(TagActivity.this, "" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                    writeThisTag(mAuthToken, parent.getItemAtPosition(position).toString());
+
+
+
+
                 }
             });
            // Toast.makeText(this, (CharSequence) mtagMap.toString(), Toast.LENGTH_LONG).show();
@@ -60,6 +67,21 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.tag, menu);
         return true;
+    }
+
+    private void writeThisTag(String auth_token, String tag_id){
+        if (!tag_id.isEmpty()){
+            String[] mTagValues = tag_id.split(",");
+
+            Intent i = new Intent(this, WriteActivity.class);
+            i.putExtra("AuthToken",mAuthToken);
+            i.putExtra("TagID",mTagValues[0]);
+            i.putExtra("TagName",mTagValues[1]);
+
+            startActivity(i);
+
+        }
+
     }
 
     @Override
@@ -76,6 +98,9 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
     public void onFragmentInteraction(Uri uri) {
         // we need this for fragments / menus
         //not sure what we have to do here if anything
+    }
+    public void onFragmentInteraction(String id){
+        // do nothing
     }
     public void makeNewTag(View view){
         mTapTag = new TapTag();
@@ -113,7 +138,7 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
         }
 
         public Object getItem(int position) {
-            return mTagKeys[position];
+            return mTagKeys[position] + ", " + mTagValues[position];
         }
 
         public long getItemId(int position) {

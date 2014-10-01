@@ -11,8 +11,11 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import co.tapdatapp.tapandroid.service.TapUser;
 
 
 /**
@@ -33,6 +36,7 @@ public class Account extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private TapUser mTapUser;
 
     private OnFragmentInteractionListener mListener;
 
@@ -56,6 +60,9 @@ public class Account extends Fragment {
     public Account() {
         // Required empty public constructor
     }
+    public void setTapUser(TapUser tap_user){
+        mTapUser = tap_user;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,15 +71,37 @@ public class Account extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
        // Toast.makeText(getActivity(), (CharSequence)("Howdy Account"), Toast.LENGTH_SHORT).show();
 
     }
+    @Override
+    public void onResume(){
+        super.onResume();
+        MainActivity ma =  (MainActivity) getActivity();
+        mTapUser=  ma.getUserContext();
 
+        EditText nickName = (EditText)  getActivity().findViewById(R.id.etNickName);
+        nickName.setText( mTapUser.getNickname());
+
+        EditText email = (EditText)getActivity().findViewById(R.id.etEmail);
+        email.setText(mTapUser.getEmail());
+
+        TextView btcInbound = (TextView)getActivity().findViewById(R.id.tvLoadAdd);
+        btcInbound.setText("Load Address: " + mTapUser.getBTCinbound());
+
+
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+
         return inflater.inflate(R.layout.fragment_account, container, false);
+
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -86,6 +115,8 @@ public class Account extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
+
+
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()

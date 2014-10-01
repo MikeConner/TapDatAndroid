@@ -1,0 +1,94 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:weightSum="1">
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="70dp">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Write Tag"
+                android:id="@+id/btnWrite"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignBottom="@+id/edTagName"
+                android:onClick="startWrite"/>
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/edTagName"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true"
+                android:text="Tag Name..."
+                android:layout_toStartOf="@+id/btnWrite" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:text="tagID:"
+                android:id="@+id/tvID"
+                android:layout_below="@+id/btnWrite"
+                android:layout_toEndOf="@+id/edTagName"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.52">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_horizontal|top"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Default Yapa"
+                android:id="@+id/txtViewYapa"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:src="@drawable/ic_launcher"
+                android:layout_weight="0.69" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/dtYapaMessage"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="0.35"
+                android:text="Your Yapa Message" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Next Yapa"
+                android:id="@+id/btnYapaNext"
+                android:layout_gravity="center_horizontal" />
+        </LinearLayout>
+    </FrameLayout>
+
+</LinearLayout>
