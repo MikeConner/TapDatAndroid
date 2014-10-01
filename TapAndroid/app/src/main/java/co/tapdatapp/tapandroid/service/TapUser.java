@@ -179,7 +179,7 @@ public class TapUser {
 
             json.put("user", user);
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
-            output = mTapCloud.httpPost(TAP_REGISTER_API_ENDPOINT_URL + "?auth_token=" + mAuthToken, json);
+            output = mTapCloud.httpPut(TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
 //            mAuthToken = output.getJSONObject("response").getString("auth_token");
 //            mNickName = output.getJSONObject("response").getString("nickname");
             Log.e("bob","bob");
