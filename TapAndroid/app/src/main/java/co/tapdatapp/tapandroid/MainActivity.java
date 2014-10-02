@@ -1,12 +1,15 @@
 package co.tapdatapp.tapandroid;
 
+import java.io.File;
 import java.util.Locale;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -30,7 +33,7 @@ import co.tapdatapp.tapandroid.service.TapTxn;
 
 public class MainActivity extends Activity implements Account.OnFragmentInteractionListener, History.OnFragmentInteractionListener, Arm.OnFragmentInteractionListener, ActionBar.TabListener {
 
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
     private SharedPreferences mPreferences;
@@ -256,9 +259,10 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
        // Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
       //  startActivityForResult(takePicture, 0);//zero can be replaced with any action code
 
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+       // Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+       //         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+       // startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+        selectImage();
     }
 
 
@@ -279,8 +283,36 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         EditText edEmail = (EditText) findViewById(R.id.etEmail);
         EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
 
-        mTapUser.UpdateUser(mAuthToken, edName.getText().toString(),edEmail.getText().toString(), edWithDraw.getText().toString());
+        mTapUser.UpdateUser(mAuthToken, edName.getText().toString(), edEmail.getText().toString(), edWithDraw.getText().toString());
 
+    }
+    private void selectImage() {
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    File f = new File(android.os.Environment
+                            .getExternalStorageDirectory(), "temp.jpg");
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                } else if (items[item].equals("Choose from Library")) {
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(intent , 1);//one can be replaced with any action code
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
 }
