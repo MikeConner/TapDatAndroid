@@ -2,6 +2,7 @@ package co.tapdatapp.tapandroid;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,9 +15,11 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -24,7 +27,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.nfc.NdefMessage;
+import android.nfc.NfcAdapter;
 import android.os.Environment;
+import android.os.Parcelable;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -75,8 +81,11 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     private float fAmount;
     private int fUnit;
     private TextView txAmount;
-
-
+    private NfcAdapter mNfcAdapter;
+    private IntentFilter[] mNdefExchangeFilters;
+    private PendingIntent mNfcPendingIntent;
+    private boolean mArmed = false;
+    private ArmedFragment mArmFrag;
     public   TapUser getUserContext(){
         return mTapUser;
 
@@ -85,7 +94,23 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     protected void onCreate(Bundle savedInstanceState) {
         fAmount = 1;
         fUnit = 1;
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
+        mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
+                getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+                | Intent.FLAG_ACTIVITY_CLEAR_TOP), 0);
+        IntentFilter smartwhere = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
+
+
+
+        try {
+            smartwhere.addDataType("tapdat/performer");    /* Handles all MIME based dispatches.
+                                       You should specify only the ones that you need. */
+        }
+        catch (IntentFilter.MalformedMimeTypeException  e) {
+            throw new RuntimeException("fail", e);
+        }
+        mNdefExchangeFilters = new IntentFilter[] { smartwhere };
 
         StrictMode.ThreadPolicy tp = StrictMode.ThreadPolicy.LAX;
         StrictMode.setThreadPolicy(tp);
@@ -189,9 +214,36 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         super.onResume();
       //  Toast.makeText(this, (CharSequence) (mTapUser.getNickname()), Toast.LENGTH_SHORT).show();
         txAmount = (TextView) findViewById(R.id.txtAmount);
+        if (mNfcAdapter != null) {
+            mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,
+                    mNdefExchangeFilters, null);
+            //if (!mNfcAdapter.isEnabled()) {
+            //LayoutInflater inflater = getLayoutInflater();
+            //View dialoglayout = inflater.inflate(R.layout.nfc_settings_layout,(ViewGroup) findViewById(R.id.nfc_settings_layout));
+                /*new AlertDialog.Builder(this).setView(dialoglayout)
+                        .setPositiveButton("Update Settings", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Intent setnfc = new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+                                startActivity(setnfc);
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            public void onCancel(DialogInterface dialog) {
+                                finish(); // exit application if user cancels
+                            }
+                        }).create().show();
+            }*/
+            // } else {
+            //     Toast.makeText(getApplicationContext(), "Sorry, No NFC Adapter found.", Toast.LENGTH_SHORT).show();
+            // }
+        }
 
     }
-
+    @Override
+    public void onPause(){
+        super.onPause();
+        if(mNfcAdapter != null) mNfcAdapter.disableForegroundDispatch(this);
+    }
     @Override
     public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
     }
@@ -444,6 +496,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
     public void armOrSend(View v){
+        mArmed=true;
         showDialog();
 
     }
@@ -462,8 +515,8 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment =  new ArmedFragment(mAuthToken, fAmount);
-        newFragment.show(ft, "dialog");
+        mArmFrag =  new ArmedFragment(mAuthToken, fAmount);
+        mArmFrag.show(ft, "dialog");
     }
 
     private void changeAmount(int change_value, boolean addition){
@@ -549,5 +602,46 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
     }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(intent.getAction())) {
+            NdefMessage[] messages = null;
+            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+            if (rawMsgs != null) {
+                messages = new NdefMessage[rawMsgs.length];
+                for (int i = 0; i < rawMsgs.length; i++) {
+                    messages[i] = (NdefMessage) rawMsgs[i];
+                }
+            }
+            if(messages[0] != null) {
+                String result="";
+                byte[] payload = messages[0].getRecords()[0].getPayload();
+                // this assumes that we get back am SOH followed by host/code
+                for (int b = 0; b<payload.length; b++) { // skip SOH
+                    result += (char) payload[b];
+                }
+                Toast.makeText(getApplicationContext(), "Tag Contains " + result, Toast.LENGTH_SHORT).show();
+                if (mArmed){
+                    TapTxn txn = new TapTxn();
+                    txn.TapAfool(mAuthToken, result.replaceAll("-",""),fAmount );
+                    mArmed = false;
+                    mArmFrag.setValues(txn.getMessage(), txn.getPayloadURL().toString());
+                    //tv.setText(txn.getMessage());
+
+                } else {
+
+                    //show tap screen, change button to SEND?
+                }
+                //Intent i = new Intent(this, TapArm.class);
+              //  i.putExtra("TAGID", result);
+              //  i.putExtra("TIPAMOUNT", fltTipAmount);
+              //  startActivity(i);
+
+            }
+        }
+    }
+
 
 }

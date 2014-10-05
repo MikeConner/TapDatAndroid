@@ -2,6 +2,7 @@ package co.tapdatapp.tapandroid.service;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.net.URLEncoder;
 
 import org.apache.http.HttpEntity;
@@ -59,7 +61,10 @@ public class TapCloud {
     public final static String TAP_YAPA_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/payloads.json";
     public final static String TAP_ONE_YAPA_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/payloads/";
 
-    //s3
+    public final static String TAP_TXN_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/transactions.json";
+
+
+//s3
     public final static String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
     public final static String MY_SECRET_KEY = "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";
     public final static String TAP_S3_BUCK = "tapyapa";
@@ -202,7 +207,7 @@ public class TapCloud {
         s3Client.putObject( por );
 
         ResponseHeaderOverrides override = new ResponseHeaderOverrides();
-        override.setContentType( "image/jpeg" );
+        override.setContentType("image/jpeg");
         return s3Client.getResourceUrl(TapCloud.TAP_S3_BUCK, s3_key);
 
     }
@@ -222,6 +227,17 @@ public class TapCloud {
     }
 
 
+
+
+    public static Drawable LoadImageFromWebOperations(String url) {
+        try {
+            InputStream is = (InputStream) new URL(url).getContent();
+            Drawable d = Drawable.createFromStream(is, "tap cloud");
+            return d;
+        } catch (Exception e) {
+            return null;
+        }
+    }
     public boolean isNetworkAvailable(Context mContext) {
         ConnectivityManager cm = (ConnectivityManager)
                 mContext.getSystemService(Context.CONNECTIVITY_SERVICE);

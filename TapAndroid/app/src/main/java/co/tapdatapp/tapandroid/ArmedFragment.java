@@ -3,12 +3,16 @@ package co.tapdatapp.tapandroid;
 
 
 import android.app.DialogFragment;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import co.tapdatapp.tapandroid.service.TapCloud;
 
 
 /**
@@ -19,7 +23,15 @@ public class ArmedFragment extends DialogFragment {
     private String mAuthToken;
     private float mAmount;
 
+    public  void setValues (String message, String payload_url){
 
+        TextView tv = (TextView) getView().findViewById(R.id.txtYap);
+        ImageView iv = (ImageView) getView().findViewById(R.id.imageYapa);
+        tv.setText(message);
+        iv.setImageDrawable(TapCloud.LoadImageFromWebOperations(payload_url));
+        iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
+
+    }
 
     public ArmedFragment() {
         // Required empty public constructor
