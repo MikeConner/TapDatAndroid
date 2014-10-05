@@ -2,8 +2,11 @@ package co.tapdatapp.tapandroid.service;
 
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by arash on 9/28/14.
@@ -13,19 +16,94 @@ public class TapTag {
     private String mTagName;
     private String mAuthToken;
     private TapCloud mTapCloud;
+    private ArrayList<TapYapa> mTapYapas = new ArrayList<TapYapa>();
 
 
 
+    public int YapaCount() {
+        if (mTapYapas == null){
+            return 0;
+        }
+        else {
+            return mTapYapas.size();
+        }
 
-    
-
-
-
-
-
-    public String getTagName(){
-        return mTagName;
     }
+
+    public void addYapa(String auth_token, TapYapa mYapa)
+    {
+        if(mYapa.getYapaID() == null){
+            //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+            if(mTapCloud == null){ mTapCloud = new TapCloud();}
+            //END
+
+            mAuthToken = auth_token;
+            JSONObject payload = new JSONObject();
+            JSONObject json = new JSONObject();
+            JSONObject output;
+            try {
+                payload.put("uri", mYapa.getURL());
+                payload.put("content", mYapa.getContent());
+                payload.put("threshold", mYapa.getThreshold());
+
+
+                json.put("auth_token", mAuthToken);
+                json.put("tag_id", mTagID.replaceAll("-",""));
+                json.put("payload", payload);
+                //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
+                output = mTapCloud.httpPost(TapCloud.TAP_YAPA_API_ENDPOINT_URL, json);
+                mYapa.setYapaID( output.getString("response"));
+                String J = "dslkfj;";
+//                mAuthToken = output.getJSONObject("response").getString("auth_token");
+ //               mNickName = output.getJSONObject("response").getString("nickname");
+            }
+            catch (JSONException e) {
+                e.printStackTrace();
+                Log.e("JSON", "" + e);
+            }
+
+        }
+        else
+        {
+            mYapa.loadYapa(auth_token, mYapa.getYapaID(), mTagID.replaceAll("-",""));
+            //load yappa from web
+
+        }
+        mTapYapas.add(mYapa);
+
+
+
+    }
+    public void loadYapa(String auth_token){
+        mAuthToken = auth_token;
+        String mURL = TapCloud.TAP_YAPA_API_ENDPOINT_URL + "?auth_token=" + mAuthToken + "&tag_id=" + mTagID.replaceAll("-","");
+        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+        mTapCloud = new TapCloud();
+        JSONObject output;
+        try {
+            output = mTapCloud.httpGet(mURL);
+            int tag_count = output.getInt("count");
+            if (tag_count != 0 ){
+                JSONArray ja =  output.getJSONArray("response");
+                for(int i=0; i<ja.length(); i++){
+                    TapYapa yap = new TapYapa();
+                    yap.setYapaID(ja.get(i).toString());
+                    addYapa(auth_token, yap);
+
+                }
+            }
+//
+
+        }
+        catch (Exception e)
+        {
+            Log.e(e.toString(),"b"); //TODO: any errors possible here?
+        }
+
+    }
+
+
+
     public void updateTag(String auth_token, String tag_id, String new_name){
         mAuthToken = auth_token;
 
@@ -113,6 +191,19 @@ public class TapTag {
         }
 
         return mTagID;
+    }
+
+    public void setTagID(String new_value){
+        mTagID = new_value;
+    }
+    public void setTagName (String new_value){
+        mTagName = new_value;
+    }
+    public String getTagID(){
+        return mTagID;
+    }
+    public String getTagName(){
+        return mTagName;
     }
 
 }

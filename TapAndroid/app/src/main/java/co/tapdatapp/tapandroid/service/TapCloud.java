@@ -56,6 +56,8 @@ public class TapCloud {
     public final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags.json";
     public final static String TAP_TAG_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags/0.json";
 
+    public final static String TAP_YAPA_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/payloads.json";
+    public final static String TAP_ONE_YAPA_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/payloads/";
 
     //s3
     public final static String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
@@ -138,7 +140,7 @@ public class TapCloud {
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
                 response = client.execute(post, responseHandler);
                 output = new JSONObject(response);
-                String b = "bobo";
+
 
             } catch (HttpResponseException e) {
                 e.printStackTrace();

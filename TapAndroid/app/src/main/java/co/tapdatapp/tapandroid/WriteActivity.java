@@ -23,14 +23,15 @@ import android.widget.Toast;
 import java.io.IOException;
 
 import co.tapdatapp.tapandroid.service.TapTag;
+import co.tapdatapp.tapandroid.service.TapYapa;
 
 
 public class WriteActivity extends Activity {
 
     private String mAuthToken;
     private TapTag mTapTag;
-    private String mTagID;
-    private String mTagName;
+  //  private String mTagID;
+ //   private String mTagName;
     boolean mWriteMode = false;
     private NfcAdapter mNfcAdapter;
     private PendingIntent mNfcPendingIntent;
@@ -43,16 +44,29 @@ public class WriteActivity extends Activity {
         mTapTag = new TapTag();
         Intent intent = getIntent();
         mAuthToken = intent.getStringExtra("AuthToken");
-        mTagID = intent.getStringExtra("TagID");
-        mTagName = intent.getStringExtra("TagName");
+        mTapTag.setTagID( intent.getStringExtra("TagID"));
+        mTapTag.setTagName(intent.getStringExtra("TagName"));
+        mTapTag.loadYapa(mAuthToken);
+        if(mTapTag.YapaCount() == 0){
+            TapYapa new_yapa = new TapYapa();
+            new_yapa.setContent("Enter Your message here");
+            new_yapa.setThreshold(1);
+            //TODO: Make this a default no yapa image on AWS
+            new_yapa.setURL("https://s3.amazonaws.com/tapyapa/new_key_needed");
+            mTapTag.addYapa(mAuthToken, new_yapa);
+
+            //make a new yapa for default!
+            String b = "Sdfdsfsd";
+
+        }
     }
     @Override
     public void onResume(){
         super.onResume();
         EditText edName = (EditText) findViewById(R.id.edTagName);
-        edName.setText(mTagName);
+        edName.setText(mTapTag.getTagName());
         TextView tvID = (TextView) findViewById(R.id.tvID);
-        tvID.setText(mTagID);
+        tvID.setText(mTapTag.getTagID());
 
         edName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -60,7 +74,7 @@ public class WriteActivity extends Activity {
                 if (!hasFocus){
                     EditText g = (EditText) v;
 
-                    mTapTag.updateTag(mAuthToken,mTagID.replaceAll("-",""), g.getText().toString() );
+                    mTapTag.updateTag(mAuthToken,mTapTag.getTagID().replaceAll("-",""), g.getText().toString() );
                     Toast.makeText(WriteActivity.this, "lost it", Toast.LENGTH_LONG);
                 }
             }
@@ -131,7 +145,7 @@ public class WriteActivity extends Activity {
             // Get ID from local storage
             // write ID to tag
             String strMime = "tapdat/performer";
-            String strID = mTagID;
+            String strID = mTapTag.getTagID();
             NdefRecord record = NdefRecord.createMime( strMime, strID.getBytes());
             NdefMessage message = new NdefMessage(new NdefRecord[] { record });
             if (writeDaTag(message, detectedTag)) {
