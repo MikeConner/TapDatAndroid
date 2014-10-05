@@ -13,11 +13,19 @@ public class TapTag {
     private String mTagName;
     private String mAuthToken;
     private TapCloud mTapCloud;
-   // private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags.json";
-  //  private final static String TAP_TAG_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags/0.json";
 
 
 
+
+    
+
+
+
+
+
+    public String getTagName(){
+        return mTagName;
+    }
     public void updateTag(String auth_token, String tag_id, String new_name){
         mAuthToken = auth_token;
 
@@ -46,8 +54,6 @@ public class TapTag {
         }
 
     }
-
-
     //TODO: this does not work currently! Not really needed since we're passing everything in manually to the view
     public void loadTag(String auth_token, String tag_id){
         mAuthToken=auth_token;
@@ -81,9 +87,6 @@ public class TapTag {
 
 
     }
-
-
-
     public String generateNewTag(String auth_token){
         mAuthToken = auth_token;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy

@@ -20,6 +20,7 @@ import android.widget.Toast;
 import java.util.Map;
 
 import co.tapdatapp.tapandroid.Tags;
+import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapTag;
 import co.tapdatapp.tapandroid.service.TapUser;
 
@@ -38,7 +39,13 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
         Intent intent = getIntent();
         mAuthToken = intent.getStringExtra("AuthToken");
         //TODO: error checking to make sure auth token is not expired
-        mTapUser = new TapUser();
+        mTapUser = TapCloud.getTapUser(this);
+        loadTags();
+
+    }
+
+
+    private void loadTags(){
         if (!mAuthToken.isEmpty()) {
 //            mTapUser.LoadUser(AccountActivity.this, mAuthToken);
             mtagMap = mTapUser.getTags(mAuthToken);
@@ -57,11 +64,9 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
 
                 }
             });
-           // Toast.makeText(this, (CharSequence) mtagMap.toString(), Toast.LENGTH_LONG).show();
+            // Toast.makeText(this, (CharSequence) mtagMap.toString(), Toast.LENGTH_LONG).show();
         }
-
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -105,7 +110,7 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
     public void makeNewTag(View view){
         mTapTag = new TapTag();
         mTapTag.generateNewTag(mAuthToken);
-
+        loadTags();
 
     }
     private class ImageAdapter extends BaseAdapter {
@@ -150,7 +155,7 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
             ImageView imageView;
             if (convertView == null) {  // if it's not recycled, initialize some attributes
                 imageView = new ImageView(mContext);
-                imageView.setLayoutParams(new GridView.LayoutParams(120, 120));
+                imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
                 imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 imageView.setPadding(8, 8, 8, 8);
             } else {

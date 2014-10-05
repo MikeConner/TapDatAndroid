@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     private TextView txAmount;
 
 
-    public TapUser getUserContext(){
+    public   TapUser getUserContext(){
         return mTapUser;
 
     }
@@ -125,9 +125,9 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
         //Start of Tap Network Operations
         mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
-        mTapUser = new TapUser();
-        mTapCloud = new TapCloud();
 
+        mTapCloud = new TapCloud();
+        mTapUser = TapCloud.getTapUser(this);
         if (mPreferences.contains("PhoneSecret")) {
             mPhoneSecret = mPreferences.getString("PhoneSecret", "");
         }
@@ -405,7 +405,10 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 //            Bitmap imageBitmap = (Bitmap)
                 ImageView mImageView = (ImageView) findViewById(R.id.imageView);
                 mImageView.setImageURI(mContentURI);
-                moveFile(mContentURI, "new_key_needed");
+                String newURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
+                mTapUser.setBTCoutbound(newURL );
+                mTapUser.UpdateUser(mAuthToken);
+
             }
         }
     }
@@ -435,45 +438,12 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     }
 
 
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
-            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
-
-    public void moveFile(Uri mURI, String s3_key){
-        //String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
-        //String MY_SECRET_KEY = "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";
-        AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( TapCloud.MY_ACCESS_KEY_ID, TapCloud.MY_SECRET_KEY ) );
-        //Bucket b =  s3Client.createBucket( "test" );
-        String c = getRealPathFromURI(MainActivity.this, mURI);
-
-        PutObjectRequest por = new PutObjectRequest( TapCloud.TAP_S3_BUCK, s3_key   ,  new File(c) );
-        s3Client.putObject( por );
-
-        ResponseHeaderOverrides override = new ResponseHeaderOverrides();
-        override.setContentType( "image/jpeg" );
-        mTapUser.setBTCoutbound(s3Client.getResourceUrl(TapCloud.TAP_S3_BUCK, s3_key) );
-        mTapUser.UpdateUser(mAuthToken);
-        
-
- //       GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "tapayapa", "MyYapa" );
-  //      urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
- //       urlRequest.setResponseHeaders(override);
-        //s3Client.getResourceUrl("");
-  //      URL url = s3Client.generatePresignedUrl( urlRequest );
 
 
-    }
+
+
+
+
 
     private void changeAmount(int change_value, boolean addition){
         if (addition) {
@@ -494,14 +464,12 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
     }
-
     public void tapPlus(View v){
         changeAmount(fUnit, true);
     }
     public void tapMinus(View v){
         changeAmount(fUnit, false);
     }
-
     private void selectMe(View v){
         Button btnOne = (Button) findViewById(R.id.btnOne);
         Button btnFive = (Button) findViewById(R.id.btnFive);
