@@ -38,6 +38,27 @@ public class TapCloud {
     DefaultHttpClient client;
 
 
+    //*/
+    public final static String TAP_REGISTER_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/registrations.json";
+
+    public final static String TAP_USER_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/users/me";
+    public final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/users/reset_nickname";
+
+    public final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags.json";
+    public final static String TAP_TAG_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags/0.json";
+
+
+    //s3
+    public final static String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
+    public final static String MY_SECRET_KEY = "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";
+    public final static String TAP_S3_BUCK = "tapyapa";
+/*/// live mode
+
+    private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/registrations.json";
+    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/nfc_tags.json";
+    private final static String TAP_USER_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/me";
+    private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/reset_nickname";
+//*/
 
     public JSONObject httpPut(String url, JSONObject json){
         //TODO: Create this one time in class instantiation vs. here and destory later
@@ -87,16 +108,19 @@ public class TapCloud {
         JSONObject output = new JSONObject();
         try {
             try {
-                StringEntity se = new StringEntity(json.toString());
-                post.setEntity(se);
 
                 // setup the request headers
                 post.setHeader("Accept", "application/json");
                 post.setHeader("Content-Type", "application/json");
 
+                StringEntity se = new StringEntity(json.toString());
+                post.setEntity(se);
+
+
                 ResponseHandler<String> responseHandler = new BasicResponseHandler();
                 response = client.execute(post, responseHandler);
                 output = new JSONObject(response);
+                String b = "bobo";
 
             } catch (HttpResponseException e) {
                 e.printStackTrace();

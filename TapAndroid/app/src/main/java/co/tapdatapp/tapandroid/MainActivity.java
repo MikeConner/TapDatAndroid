@@ -1,6 +1,10 @@
 package co.tapdatapp.tapandroid;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
 
 import android.app.ActionBar;
@@ -9,10 +13,17 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -21,8 +32,20 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.internal.Constants;
+import com.amazonaws.services.s3.model.Bucket;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
@@ -48,6 +71,10 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     private Fragment mHistoryFrag;
     private Fragment mTapFrag;
 
+    private float fAmount;
+    private int fUnit;
+    private TextView txAmount;
+
 
     public TapUser getUserContext(){
         return mTapUser;
@@ -55,6 +82,10 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        fAmount = 1;
+        fUnit = 1;
+
+
         StrictMode.ThreadPolicy tp = StrictMode.ThreadPolicy.LAX;
         StrictMode.setThreadPolicy(tp);
 
@@ -156,7 +187,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     public void onResume(){
         super.onResume();
       //  Toast.makeText(this, (CharSequence) (mTapUser.getNickname()), Toast.LENGTH_SHORT).show();
-
+        txAmount = (TextView) findViewById(R.id.txtAmount);
 
     }
 
@@ -286,6 +317,29 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         mTapUser.UpdateUser(mAuthToken, edName.getText().toString(), edEmail.getText().toString(), edWithDraw.getText().toString());
 
     }
+
+
+    String mCurrentPhotoPath;
+    boolean mFromCamera = false;
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
+
     private void selectImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
@@ -296,12 +350,26 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
             @Override
             public void onClick(DialogInterface dialog, int item) {
                 if (items[item].equals("Take Photo")) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File f = new File(android.os.Environment
-                            .getExternalStorageDirectory(), "temp.jpg");
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
-                    startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+                    mFromCamera = true;
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                    Uri.fromFile(photoFile));
+                            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                        }
+
+                    }
                 } else if (items[item].equals("Choose from Library")) {
+                    mFromCamera = false;
                     Intent intent = new Intent(
                             Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -313,6 +381,184 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
             }
         });
         builder.show();
+
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            if (mFromCamera) {
+             //
+             String b = mCurrentPhotoPath;
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                File f = new File(mCurrentPhotoPath);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+
+                setPic();
+            }
+            else {
+//            Bundle b = data.getExtras();
+           //     Bundle extras = data.getData();
+                Uri mContentURI = data.getData();
+                //         String mRealPath = getRealPathFromURI(mContentURI);
+//            Bitmap imageBitmap = (Bitmap)
+                ImageView mImageView = (ImageView) findViewById(R.id.imageView);
+                mImageView.setImageURI(mContentURI);
+                moveFile(mContentURI, "new_key_needed");
+            }
+        }
+    }
+    private void setPic() {
+        ImageView mImageView = (ImageView) findViewById(R.id.imageView);
+        // Get the dimensions of the View
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
+    }
+
+
+    public String getRealPathFromURI(Context context, Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] proj = { MediaStore.Images.Media.DATA };
+            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
+    public void moveFile(Uri mURI, String s3_key){
+        //String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
+        //String MY_SECRET_KEY = "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";
+        AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( TapCloud.MY_ACCESS_KEY_ID, TapCloud.MY_SECRET_KEY ) );
+        //Bucket b =  s3Client.createBucket( "test" );
+        String c = getRealPathFromURI(MainActivity.this, mURI);
+
+        PutObjectRequest por = new PutObjectRequest( TapCloud.TAP_S3_BUCK, s3_key   ,  new File(c) );
+        s3Client.putObject( por );
+
+        ResponseHeaderOverrides override = new ResponseHeaderOverrides();
+        override.setContentType( "image/jpeg" );
+        mTapUser.setBTCoutbound(s3Client.getResourceUrl(TapCloud.TAP_S3_BUCK, s3_key) );
+        mTapUser.UpdateUser(mAuthToken);
+        
+
+ //       GeneratePresignedUrlRequest urlRequest = new GeneratePresignedUrlRequest( "tapayapa", "MyYapa" );
+  //      urlRequest.setExpiration( new Date( System.currentTimeMillis() + 3600000 ) );  // Added an hour's worth of milliseconds to the current time.
+ //       urlRequest.setResponseHeaders(override);
+        //s3Client.getResourceUrl("");
+  //      URL url = s3Client.generatePresignedUrl( urlRequest );
+
+
+    }
+
+    private void changeAmount(int change_value, boolean addition){
+        if (addition) {
+            fUnit = change_value;
+            fAmount += fUnit;
+
+            if (fAmount > 500 ) {fAmount = 500;} //MAX VALUE FOR TIP
+            txAmount = (TextView) findViewById(R.id.txtAmount);
+            txAmount.setText("$" + String.valueOf(fAmount));
+        }
+        else{
+            fUnit = change_value;
+            fAmount-= fUnit;
+            if (fAmount < 1) {fAmount = 1;}
+            txAmount = (TextView) findViewById(R.id.txtAmount);
+            txAmount.setText("$" + String.valueOf(fAmount));
+        }
+
+
+    }
+
+    public void tapPlus(View v){
+        changeAmount(fUnit, true);
+    }
+    public void tapMinus(View v){
+        changeAmount(fUnit, false);
+    }
+
+    private void selectMe(View v){
+        Button btnOne = (Button) findViewById(R.id.btnOne);
+        Button btnFive = (Button) findViewById(R.id.btnFive);
+        Button btnTen = (Button) findViewById(R.id.btnTen);
+        Button btnTwenty = (Button) findViewById(R.id.btnTwenty);
+        Button btnFifty = (Button) findViewById(R.id.btnFifty);
+        Button btnHundred = (Button) findViewById(R.id.btnHundred);
+
+        Resources res = getResources();
+        Drawable selected = res.getDrawable(R.drawable.circleselected);
+        Drawable normal = res.getDrawable(R.drawable.circle);
+        btnOne.setBackground(normal);
+        btnFive.setBackground(normal);
+        btnTen.setBackground(normal);
+        btnTwenty.setBackground(normal);
+        btnFifty.setBackground(normal);
+        btnHundred.setBackground(normal);
+
+        v.setBackground(selected);
+
+    }
+    public void tapOne(View v){
+        selectMe(v);
+        changeAmount(1,true);
+    }
+    public void tapFive(View v){
+        selectMe(v);
+        changeAmount(5,true);
+
+
+    }
+    public void tapTen(View v){
+        selectMe(v);
+
+        changeAmount(10,true);
+
+
+    }
+    public void tapTwenty(View v){
+        selectMe(v);
+
+        changeAmount(20, true);
+
+    }
+    public void tapFifty(View v){
+        selectMe(v);
+
+        changeAmount(50,true);
+
+
+    }
+    public void tapHundred(View v){
+        selectMe(v);
+
+        changeAmount(100,true);
+
+
     }
 
 }

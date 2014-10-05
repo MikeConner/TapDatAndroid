@@ -13,8 +13,8 @@ public class TapTag {
     private String mTagName;
     private String mAuthToken;
     private TapCloud mTapCloud;
-    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/nfc_tags.json";
-    private final static String TAP_TAG_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/nfc_tags/0.json";
+   // private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags.json";
+  //  private final static String TAP_TAG_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/nfc_tags/0.json";
 
 
 
@@ -24,7 +24,7 @@ public class TapTag {
         JSONObject json = new JSONObject();
         JSONObject output;
 
-        String mURL = TAP_TAG_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        String mURL = TapCloud.TAP_TAG_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
 
@@ -57,7 +57,7 @@ public class TapTag {
         //END
 
 
-        String mURL = TAP_TAGS_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        String mURL = TapCloud.TAP_TAGS_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
         JSONObject output;
@@ -99,7 +99,7 @@ public class TapTag {
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
 
             //TODO: Update this to session controller instead of registration controller
-            output = mTapCloud.httpPost(TAP_TAGS_API_ENDPOINT_URL, tag);
+            output = mTapCloud.httpPost(TapCloud.TAP_TAGS_API_ENDPOINT_URL, tag);
             mTagID = output.getJSONObject("response").getString("id");
             mTagName = output.getJSONObject("response").getString("name");
         //    Log.e(output.toString(), "" );

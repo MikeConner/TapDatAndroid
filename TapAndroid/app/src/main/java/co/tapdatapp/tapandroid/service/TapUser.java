@@ -17,13 +17,24 @@ import java.util.Random;
  */
 public class TapUser {
     private static final int PHONE_SECRET_SIZE = 16;
+
+/*/not yet used
     private static final String TASKS_URL = "http://10.0.2.2:3000/api/v1/tasks.json";
     private final static String LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/sessions.json";
-    private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/registrations.json";
     private final static String TAP_LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/sessions.json";
-    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/nfc_tags.json";
-    private final static String TAP_USER_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/users/me";
-    private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/users/reset_nickname";
+
+//*
+    private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/registrations.json";
+    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/nfc_tags.json";
+    private final static String TAP_USER_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/users/me";
+    private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/users/reset_nickname";
+
+//// live mode
+    private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/registrations.json";
+    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/nfc_tags.json";
+    private final static String TAP_USER_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/me";
+    private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/reset_nickname";
+//*/
     private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
 
     private String mUserEmail;
@@ -50,7 +61,7 @@ public class TapUser {
             user.put("phone_secret_key", phone_secret);
             json.put("user", user);
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
-            output = mTapCloud.httpPost(TAP_REGISTER_API_ENDPOINT_URL, json);
+            output = mTapCloud.httpPost(TapCloud.TAP_REGISTER_API_ENDPOINT_URL, json);
             mAuthToken = output.getJSONObject("response").getString("auth_token");
             mNickName = output.getJSONObject("response").getString("nickname");
         }
@@ -63,7 +74,7 @@ public class TapUser {
 
     public void LoadUser(String auth_token){
         mAuthToken = auth_token;
-        String mURL = TAP_USER_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        String mURL = TapCloud.TAP_USER_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
         JSONObject output;
@@ -87,7 +98,7 @@ public class TapUser {
         JSONObject json = new JSONObject();
         JSONObject output;
 
-        String mURL = TAP_USERNICK_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        String mURL = TapCloud.TAP_USERNICK_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
 
@@ -122,7 +133,7 @@ public class TapUser {
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
 
             //TODO: Update this to session controller instead of registration controller
-            output = mTapCloud.httpPost(TAP_REGISTER_API_ENDPOINT_URL, json);
+            output = mTapCloud.httpPost(TapCloud.TAP_REGISTER_API_ENDPOINT_URL, json);
             mAuthToken = output.getJSONObject("response").getString("auth_token");
             mNickName = output.getJSONObject("response").getString("nickname");
         }
@@ -135,7 +146,7 @@ public class TapUser {
 
     public Map<String, String> getTags(String auth_token){
         mAuthToken = auth_token;
-        String mURL = TAP_TAGS_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        String mURL = TapCloud.TAP_TAGS_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
         JSONObject output = new JSONObject();
@@ -179,7 +190,35 @@ public class TapUser {
 
             json.put("user", user);
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
-            output = mTapCloud.httpPut(TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
+            output = mTapCloud.httpPut(TapCloud.TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
+//            mAuthToken = output.getJSONObject("response").getString("auth_token");
+//            mNickName = output.getJSONObject("response").getString("nickname");
+            Log.e("bob","bob");
+        }
+        catch (JSONException e) {
+            e.printStackTrace();
+            Log.e("JSON", "" + e);
+        }
+    }
+
+    public void UpdateUser(String auth_token){
+        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+        mTapCloud = new TapCloud();
+        //END
+
+        mAuthToken = auth_token;
+
+        JSONObject user = new JSONObject();
+        JSONObject json = new JSONObject();
+        JSONObject output;
+        try {
+            user.put("email", mUserEmail);
+            user.put("name", mNickName);
+            user.put("outbound_btc_address", mOutboundBTCaddress);
+
+            json.put("user", user);
+            //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
+            output = mTapCloud.httpPut(TapCloud.TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
 //            mAuthToken = output.getJSONObject("response").getString("auth_token");
 //            mNickName = output.getJSONObject("response").getString("nickname");
             Log.e("bob","bob");
