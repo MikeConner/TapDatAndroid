@@ -31,7 +31,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/tapbutton_bg"/>
+        android:background="@drawable/tapbutton_bg"
+        android:onClick="armOrSend" />
 
     <FrameLayout
         android:layout_width="fill_parent"
