@@ -183,7 +183,8 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
             if (mPreferences.contains("AuthToken")) {
                 if (!mPreferences.getString("AuthToken", "").isEmpty()){
                     mAuthToken = mPreferences.getString("AuthToken", "");
-                mTapUser.LoadUser(mAuthToken);
+                    mTapCloud.setAuthToken(mAuthToken);
+                    mTapUser.LoadUser(mAuthToken);
                 //TODO: Failure case for when auth token has expired -> get error, get new auth token based on secret
             }
                 else {
@@ -192,6 +193,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
                     editor.putString("AuthToken", mAuthToken);
                     editor.putString("NickName", mTapUser.getNickname());
                     editor.commit();
+                    mTapCloud.setAuthToken(mAuthToken);
 
 
                 }
@@ -206,6 +208,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
                 //We know user is null, but let's load user anyway to be consistent with above
+                mTapCloud.setAuthToken(mAuthToken);
                 mTapUser.LoadUser(mAuthToken);
                // mAccountFrag.setTapUser(mTapUser);
                 //TODO: Delete Auth Token on kill of application, so it gets a new one when it comes back

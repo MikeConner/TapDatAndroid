@@ -45,10 +45,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+//TODO: All network should be done async
+//TODO: remove strict Mode
 
-/**
- * Created by arash on 9/28/14.
- */
 public class TapCloud {
     DefaultHttpClient client;
 
@@ -66,6 +65,7 @@ public class TapCloud {
     public final static String TAP_ONE_YAPA_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/payloads/";
 
     public final static String TAP_TXN_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/transactions.json";
+    //public final static String TAP_USER_TXNS_API_ENDPOINT_URL = "http://192.168.1.135:3000/mobile/1/transactions.json";
 
 
 //s3
@@ -80,8 +80,13 @@ public class TapCloud {
     private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/reset_nickname";
 //*/
 
-
-
+    private static String mAuthToken;
+    public static String getAuthToken(){
+        return mAuthToken;
+    }
+    public static void setAuthToken(String new_value){
+        mAuthToken = new_value;
+    }
     private static TapUser mTapUser;
     public static TapUser getTapUser(Context context){
         if (mTapUser == null){

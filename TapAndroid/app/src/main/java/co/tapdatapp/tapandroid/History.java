@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import co.tapdatapp.tapandroid.service.TapCloud;
+import co.tapdatapp.tapandroid.service.TapUser;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -107,5 +110,11 @@ public class History extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        //Assuming the auth token in user object is correct
+        TapUser mTapUser = TapCloud.getTapUser(getActivity());
+        mTapUser.loadTxns(TapCloud.getAuthToken());
+    }
 }

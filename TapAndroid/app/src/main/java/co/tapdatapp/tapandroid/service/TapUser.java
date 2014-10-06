@@ -58,6 +58,30 @@ public class TapUser {
         }
         return mAuthToken;
     }
+//
+    public void loadTxns(String auth_token){
+    mAuthToken = auth_token;
+    String mURL = TapCloud.TAP_TXN_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+    //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
+    mTapCloud = new TapCloud();
+    JSONObject output;
+    try {
+        output = mTapCloud.httpGet(mURL);
+        //mNickName = output.getJSONObject("response").getString("nickname");
+        //mInboundBTCaddress = output.getJSONObject("response").getString("inbound_btc_address");
+        //mOutboundBTCaddress = output.getJSONObject("response").getString("outbound_btc_address");
+        //mBalance = output.getJSONObject("response").getInt("satoshi_balance");
+        //mUserEmail = output.getJSONObject("response").getString("email");
+        //mProfilePicFull = output.getJSONObject("response").getString("profile_image");
+        //mProfilePicThumb = output.getJSONObject("response").getString("profile_thumb");
+        String b = "324324";
+
+    }
+    catch (Exception e)
+    {
+        //TODO: any errors possible here?
+    }
+}
 
     public void LoadUser(String auth_token){
         mAuthToken = auth_token;
