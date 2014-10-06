@@ -4,17 +4,25 @@ import android.app.Activity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+
+import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
 
 
@@ -90,6 +98,9 @@ public class Account extends Fragment {
         TextView btcInbound = (TextView)getActivity().findViewById(R.id.tvLoadAdd);
         btcInbound.setText("Load Address: " + mTapUser.getBTCinbound());
 
+        //TODO:UPDATE THIS TO THUMBNAIL!!!!
+        new TapCloud.DownloadImageTask((ImageView) getActivity().findViewById(R.id.imageView))
+                .execute(mTapUser.getProfilePicFull());
 
     }
     @Override
@@ -144,6 +155,29 @@ public class Account extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
+   /* private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
 
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
+    }*/
 
 }

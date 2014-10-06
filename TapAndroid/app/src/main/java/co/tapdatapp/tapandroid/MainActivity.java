@@ -2,6 +2,7 @@ package co.tapdatapp.tapandroid;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -26,9 +27,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
@@ -36,6 +39,7 @@ import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -86,6 +90,14 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     private PendingIntent mNfcPendingIntent;
     private boolean mArmed = false;
     private ArmedFragment mArmFrag;
+
+    //For File Uploads
+    String mCurrentPhotoPath;
+    boolean mFromCamera = false;
+    static final int REQUEST_TAKE_PHOTO = 1;
+
+
+
     public   TapUser getUserContext(){
         return mTapUser;
 
@@ -214,6 +226,11 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         super.onResume();
       //  Toast.makeText(this, (CharSequence) (mTapUser.getNickname()), Toast.LENGTH_SHORT).show();
         txAmount = (TextView) findViewById(R.id.txtAmount);
+        //ImageView ivProfilePic = (ImageView) findViewById(R.id.imageView);
+
+
+
+
         if (mNfcAdapter != null) {
             mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,
                     mNdefExchangeFilters, null);
@@ -338,16 +355,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         // we need this for fragments / menus
         //not sure what we have to do here if anything
     }
-    public void getImage(View view){
 
-       // Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-      //  startActivityForResult(takePicture, 0);//zero can be replaced with any action code
-
-       // Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-       //         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-       // startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
-        selectImage();
-    }
 
 
     public void myTags(View view){
@@ -366,16 +374,25 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         EditText edName = (EditText) findViewById(R.id.etNickName);
         EditText edEmail = (EditText) findViewById(R.id.etEmail);
         EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
-
-        mTapUser.UpdateUser(mAuthToken, edName.getText().toString(), edEmail.getText().toString(), edWithDraw.getText().toString());
+        mTapUser.setNickName(edName.getText().toString());
+        mTapUser.setBTCoutbound( edWithDraw.getText().toString());
+        mTapUser.setEmail(edEmail.getText().toString());
+        mTapUser.UpdateUser(mAuthToken);
 
     }
 
 
-    String mCurrentPhotoPath;
-    boolean mFromCamera = false;
-    static final int REQUEST_TAKE_PHOTO = 1;
 
+    public void getImage(View view){
+
+        // Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        //  startActivityForResult(takePicture, 0);//zero can be replaced with any action code
+
+        // Intent pickPhoto = new Intent(Intent.ACTION_PICK,
+        //         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        // startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
+        selectImage();
+    }
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -440,7 +457,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             if (mFromCamera) {
-             //
+             //TODO: This does not work for From Camera!!!
              String b = mCurrentPhotoPath;
                 Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 File f = new File(mCurrentPhotoPath);
@@ -457,9 +474,30 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
                 //         String mRealPath = getRealPathFromURI(mContentURI);
 //            Bitmap imageBitmap = (Bitmap)
                 ImageView mImageView = (ImageView) findViewById(R.id.imageView);
-                mImageView.setImageURI(mContentURI);
-                String newURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
-                mTapUser.setBTCoutbound(newURL );
+//                mImageView.setImageURI(mContentURI);
+
+                String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
+                String newFUllImagePath = TapCloud.getRealPathFromURI(this,mContentURI);
+
+
+                try {
+                    ExifInterface exif = new ExifInterface(newFUllImagePath);
+                    byte[] imageData = exif.getThumbnail();
+                    Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                    mImageView.setImageBitmap(thumbnail);
+                }
+                catch (Exception e){
+                    //TODO: not sure what to catch here?
+                }
+
+            //    String selectedImagePath = getPath(mContentURI);
+             //   String newThumbImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
+
+
+                mTapUser.setProfilePicFull(newFullImageURL );
+               // mTapUser.setProfilePicThumb(newThumbImageURL );
+
+                //TODO: THUMB IS NOT SET YET>. get THUMB
                 mTapUser.UpdateUser(mAuthToken);
 
             }
@@ -603,6 +641,14 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
     }
 
+
+
+
+
+
+
+
+
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -642,6 +688,11 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
             }
         }
     }
+
+
+
+
+
 
 
 }

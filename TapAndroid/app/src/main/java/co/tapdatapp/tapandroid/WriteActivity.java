@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapTag;
 import co.tapdatapp.tapandroid.service.TapYapa;
 
@@ -52,7 +53,7 @@ public class WriteActivity extends Activity {
             new_yapa.setContent("Enter Your message here");
             new_yapa.setThreshold(1);
             //TODO: Make this a default no yapa image on AWS
-            new_yapa.setURL("https://s3.amazonaws.com/tapyapa/new_key_needed");
+            new_yapa.setURL(TapCloud.getTapUser(this).getProfilePicFull());
             mTapTag.addYapa(mAuthToken, new_yapa);
 
             //make a new yapa for default!

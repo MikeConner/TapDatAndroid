@@ -18,23 +18,7 @@ import java.util.Random;
 public class TapUser {
     private static final int PHONE_SECRET_SIZE = 16;
 
-/*/not yet used
-    private static final String TASKS_URL = "http://10.0.2.2:3000/api/v1/tasks.json";
-    private final static String LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/api/v1/sessions.json";
-    private final static String TAP_LOGIN_API_ENDPOINT_URL = "http://10.0.2.2:3000/mobile/1/sessions.json";
 
-//*
-    private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/registrations.json";
-    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/nfc_tags.json";
-    private final static String TAP_USER_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/users/me";
-    private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.2.25:3000/mobile/1/users/reset_nickname";
-
-//// live mode
-    private final static String TAP_REGISTER_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/registrations.json";
-    private final static String TAP_TAGS_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/nfc_tags.json";
-    private final static String TAP_USER_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/me";
-    private final static String TAP_USERNICK_API_ENDPOINT_URL = "http://192.168.1.132/mobile/1/users/reset_nickname";
-//*/
     private static final String ALLOWED_CHARACTERS ="0123456789qwertyuiopasdfghjklzxcvbnm";
 
     private String mUserEmail;
@@ -46,6 +30,9 @@ public class TapUser {
     private String mAuthToken;
     private Map<String, String> mtagMap;
     private TapCloud mTapCloud;
+
+    private String mProfilePicThumb;
+    private String mProfilePicFull;
 
 
     public String CreateUser (String phone_secret){
@@ -85,6 +72,8 @@ public class TapUser {
             mOutboundBTCaddress = output.getJSONObject("response").getString("outbound_btc_address");
             mBalance = output.getJSONObject("response").getInt("satoshi_balance");
             mUserEmail = output.getJSONObject("response").getString("email");
+            mProfilePicFull = output.getJSONObject("response").getString("profile_image");
+            mProfilePicThumb = output.getJSONObject("response").getString("profile_thumb");
         }
         catch (Exception e)
         {
@@ -118,6 +107,7 @@ public class TapUser {
         return mNickName;
     }
 
+    //TODO: write this function - Used when Auth token expires
     public String getNewAuthToken(String phone_secret){
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
@@ -172,7 +162,7 @@ public class TapUser {
 
     public void UpdateUser(String auth_token, String new_nickname, String new_email_address, String new_outbound_btc_address){
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
-        mTapCloud = new TapCloud();
+       // mTapCloud = new TapCloud();
         //END
 
         mAuthToken = auth_token;
@@ -180,7 +170,8 @@ public class TapUser {
         mUserEmail = new_email_address;
         mOutboundBTCaddress = new_outbound_btc_address;
 
-        JSONObject user = new JSONObject();
+        UpdateUser(mAuthToken);
+/*        JSONObject user = new JSONObject();
         JSONObject json = new JSONObject();
         JSONObject output;
         try {
@@ -189,7 +180,6 @@ public class TapUser {
             user.put("outbound_btc_address", mOutboundBTCaddress);
 
             json.put("user", user);
-            //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
             output = mTapCloud.httpPut(TapCloud.TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
 //            mAuthToken = output.getJSONObject("response").getString("auth_token");
 //            mNickName = output.getJSONObject("response").getString("nickname");
@@ -198,7 +188,7 @@ public class TapUser {
         catch (JSONException e) {
             e.printStackTrace();
             Log.e("JSON", "" + e);
-        }
+        }*/
     }
 
     public void UpdateUser(String auth_token){
@@ -215,6 +205,8 @@ public class TapUser {
             user.put("email", mUserEmail);
             user.put("name", mNickName);
             user.put("outbound_btc_address", mOutboundBTCaddress);
+            user.put("mobile_profile_image_url", mProfilePicFull);
+    //        user.put("mobile_profile_thumb_url", mProfilePicThumb);
 
             json.put("user", user);
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
@@ -229,6 +221,28 @@ public class TapUser {
         }
     }
 
+    public String getProfilePicThumb(){
+
+        return mProfilePicThumb;
+    }
+    public void setProfilePicThumb(String new_value){
+        mProfilePicThumb = new_value;
+//        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
+    }
+
+
+    public String getProfilePicFull(){
+
+        return mProfilePicFull;
+    }
+    public void setProfilePicFull(String new_value){
+        mProfilePicFull  = new_value;
+//        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
+    }
+
+
+
+
     public String getNickname(){
 
         return mNickName;
@@ -237,6 +251,9 @@ public class TapUser {
         mNickName = mNewNickname;
         UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
+
+
+
     public String getEmail(){
         return mUserEmail;
     }
