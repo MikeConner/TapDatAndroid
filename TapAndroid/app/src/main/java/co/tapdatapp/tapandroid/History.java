@@ -117,4 +117,12 @@ public class History extends Fragment {
         TapUser mTapUser = TapCloud.getTapUser(getActivity());
         mTapUser.loadTxns(TapCloud.getAuthToken());
     }
+    @Override
+    public void setMenuVisibility(final boolean visible) {
+        super.setMenuVisibility(visible);
+        if (visible) {
+
+        }
+
+    }
 }
