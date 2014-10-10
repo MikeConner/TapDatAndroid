@@ -1,15 +1,24 @@
 package co.tapdatapp.tapandroid;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import co.tapdatapp.tapandroid.service.TapCloud;
+import co.tapdatapp.tapandroid.service.TapTxn;
 import co.tapdatapp.tapandroid.service.TapUser;
 
 
@@ -23,6 +32,7 @@ import co.tapdatapp.tapandroid.service.TapUser;
  *
  */
 public class History extends Fragment {
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -62,8 +72,9 @@ public class History extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        //Toast.makeText(getActivity(), (CharSequence) ("Howdy History"), Toast.LENGTH_SHORT).show();
+
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,7 +86,7 @@ public class History extends Fragment {
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+            //mListener.onFragmentInteraction(uri);
         }
     }
 
@@ -114,8 +125,7 @@ public class History extends Fragment {
     public void onResume(){
         super.onResume();
         //Assuming the auth token in user object is correct
-        TapUser mTapUser = TapCloud.getTapUser(getActivity());
-        mTapUser.loadTxns(TapCloud.getAuthToken());
+
     }
     @Override
     public void setMenuVisibility(final boolean visible) {
@@ -125,4 +135,9 @@ public class History extends Fragment {
         }
 
     }
+
+
+
+
+
 }

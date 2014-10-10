@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
 
@@ -43,8 +44,12 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -70,17 +75,13 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
+
     private SharedPreferences mPreferences;
     private String mPhoneSecret;
     private String mAuthToken;
     private TapUser mTapUser;
-    private TapTag mTapTag;
-    private TapTxn mTapTxn;
-    private TapCloud mTapCloud;
 
-    private Account mAccountFrag;
-    private Fragment mHistoryFrag;
-    private Fragment mTapFrag;
+    private TapCloud mTapCloud;
 
     private float fAmount;
     private int fUnit;
@@ -98,23 +99,19 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
 
-    public   TapUser getUserContext(){
-        return mTapUser;
-
-    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //Default Amounts / Units for Tap Screen
         fAmount = 1;
         fUnit = 1;
-        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
+        //Capture NFC interactions for this activity
+        //TODO: make sure NFC is turn on or kill the APP with dialog
+        mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mNfcPendingIntent = PendingIntent.getActivity(this, 0, new Intent(this,
                 getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
                 | Intent.FLAG_ACTIVITY_CLEAR_TOP), 0);
         IntentFilter smartwhere = new IntentFilter(NfcAdapter.ACTION_NDEF_DISCOVERED);
-
-
-
         try {
             smartwhere.addDataType("tapdat/performer");    /* Handles all MIME based dispatches.
                                        You should specify only the ones that you need. */
@@ -124,6 +121,8 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         }
         mNdefExchangeFilters = new IntentFilter[] { smartwhere };
 
+
+        //TODO: REMOVE THIS - Make sure all NETWORK TXNS are async
         StrictMode.ThreadPolicy tp = StrictMode.ThreadPolicy.LAX;
         StrictMode.setThreadPolicy(tp);
 
@@ -131,6 +130,8 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         setContentView(R.layout.activity_main);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
+
+        //set up action bar and nav tabs
         mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -161,9 +162,13 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
                             .setTabListener(this));
         }
 
+        //sets home page to tap
+
+        mViewPager.setCurrentItem(1);
         //Start of Tap Network Operations
         mPreferences = getSharedPreferences("CurrentUser", MODE_PRIVATE);
 
+//Main Operation - get TapCloud, create user if one does not exist based on phone secret, log in / get auth token
         mTapCloud = new TapCloud();
         mTapUser = TapCloud.getTapUser(this);
         if (mPreferences.contains("PhoneSecret")) {
@@ -186,6 +191,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
                     mTapCloud.setAuthToken(mAuthToken);
                     mTapUser.LoadUser(mAuthToken);
                 //TODO: Failure case for when auth token has expired -> get error, get new auth token based on secret
+                //TODO: Failure case in case we can't get to tap or tap is down
             }
                 else {
                     mAuthToken =  mTapUser.CreateUser(mPhoneSecret);
@@ -210,13 +216,9 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
                 //We know user is null, but let's load user anyway to be consistent with above
                 mTapCloud.setAuthToken(mAuthToken);
                 mTapUser.LoadUser(mAuthToken);
-               // mAccountFrag.setTapUser(mTapUser);
-                //TODO: Delete Auth Token on kill of application, so it gets a new one when it comes back
+
+                //TODO: Delete Auth Token on kill of application, so it gets a new one when it comes back OR NOT?
             }
-         //   mTapUser.getNewNickname(mAuthToken);
-
-
-
         }
         else {
             Toast.makeText(this, (CharSequence) ("No NETWORK!  Going Home!"), Toast.LENGTH_SHORT).show();
@@ -224,15 +226,13 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         }
         //end of Tap network Ops
     }
+
+
     @Override
     public void onResume(){
         super.onResume();
       //  Toast.makeText(this, (CharSequence) (mTapUser.getNickname()), Toast.LENGTH_SHORT).show();
         txAmount = (TextView) findViewById(R.id.txtAmount);
-        //ImageView ivProfilePic = (ImageView) findViewById(R.id.imageView);
-
-
-
 
         if (mNfcAdapter != null) {
             mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent,
@@ -272,6 +272,9 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
         // When the given tab is selected, switch to the corresponding page in the ViewPager.
         mViewPager.setCurrentItem(tab.getPosition());
+        if(tab.getText().equals("HISTORY")){
+            loadTxnHistory();
+        }
     }
 
     @Override
@@ -534,6 +537,10 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
 
+    public   TapUser getUserContext(){
+        return mTapUser;
+    }
+
 
 
     public void armOrSend(View v){
@@ -695,7 +702,76 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
 
+    private void loadTxnHistory(){
+        TapUser mTapUser = TapCloud.getTapUser(MainActivity.this);
+        mTapUser.loadTxns(TapCloud.getAuthToken());
+        //mtagMap = mTapUser.getTags(mAuthToken);
+        GridView gridview = (GridView)  findViewById(R.id.gridHistory);
+        ImageAdapter imgAdp = new ImageAdapter(MainActivity.this, mTapUser.myTransactions());
+
+        gridview.setAdapter(imgAdp);
+        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                Toast.makeText(MainActivity.this, "" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                //writeThisTag(mAuthToken, parent.getItemAtPosition(position).toString());
+            }
+        });
 
 
+
+    }
+    private class ImageAdapter extends BaseAdapter {
+        private Context mContext;
+        ArrayList<TapTxn> mTapTxns;
+        private String[] mTagKeys;
+        private String[] mTagValues;
+
+        public ImageAdapter(Context c, ArrayList<TapTxn> mTxns){
+            mTapTxns = mTxns;
+//            int i  = 0;
+//            for(Map.Entry<String,String> entry : mTagMapImg.entrySet()){
+//                mTagKeys[i]= (entry.getKey());
+//                mTagValues[i] =  entry.getValue();
+//                i++;
+//            }
+//
+            mContext = c;
+
+        }
+        public ImageAdapter(Context c) {
+            mContext = c;
+        }
+
+        public int getCount() {
+            return mTapTxns.size();
+
+        }
+
+        public Object getItem(int position) {
+            //return mTapTxns.get(position).toString();
+            return "bob";
+        }
+
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        // create a new ImageView for each item referenced by the Adapter
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ImageView imageView;
+            if (convertView == null) {  // if it's not recycled, initialize some attributes
+                imageView = new ImageView(mContext);
+                imageView.setLayoutParams(new GridView.LayoutParams(300, 300));
+                imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                imageView.setPadding(8, 8, 8, 8);
+            } else {
+                imageView = (ImageView) convertView;
+            }
+            imageView.setImageResource(R.drawable.ic_launcher);
+            return imageView;
+        }
+
+
+    }
 
 }

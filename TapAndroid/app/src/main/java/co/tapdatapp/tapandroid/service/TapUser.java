@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -33,6 +34,22 @@ public class TapUser {
 
     private String mProfilePicThumb;
     private String mProfilePicFull;
+    private int mTxnCount =0;
+
+
+    private ArrayList<TapTxn> mTapTxns = new ArrayList<TapTxn>();
+
+
+
+    public int TxnCount() {
+        if (mTapTxns == null){
+            return 0;
+        }
+        else {
+            return mTapTxns.size();
+        }
+    }
+
 
 
     public String CreateUser (String phone_secret){
@@ -59,7 +76,13 @@ public class TapUser {
         return mAuthToken;
     }
 //
+
+    public ArrayList<TapTxn> myTransactions(){
+        return mTapTxns;
+    }
+
     public void loadTxns(String auth_token){
+        mTapTxns.clear();
     mAuthToken = auth_token;
     String mURL = TapCloud.TAP_TXN_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
     //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
@@ -67,14 +90,28 @@ public class TapUser {
     JSONObject output;
     try {
         output = mTapCloud.httpGet(mURL);
-        //mNickName = output.getJSONObject("response").getString("nickname");
-        //mInboundBTCaddress = output.getJSONObject("response").getString("inbound_btc_address");
-        //mOutboundBTCaddress = output.getJSONObject("response").getString("outbound_btc_address");
-        //mBalance = output.getJSONObject("response").getInt("satoshi_balance");
-        //mUserEmail = output.getJSONObject("response").getString("email");
-        //mProfilePicFull = output.getJSONObject("response").getString("profile_image");
-        //mProfilePicThumb = output.getJSONObject("response").getString("profile_thumb");
-        String b = "324324";
+        mTxnCount = output.getInt("count");
+        JSONArray jsonTXNS =  output.getJSONArray("response");
+        int length = jsonTXNS.length();
+
+        for (int i = 0; i < length; i++) {
+            TapTxn tap_txn = new TapTxn();
+            tap_txn.setTXNid(jsonTXNS.getJSONObject(i).getString("id"))    ;
+            tap_txn.setPayloadImage(jsonTXNS.getJSONObject(i).getString("payload_image"));
+            tap_txn.setUserName(jsonTXNS.getJSONObject(i).getString("other_user_nickname"));
+            tap_txn.setTXNamountUSD((float) jsonTXNS.getJSONObject(i).getInt("dollar_amount") / 100);
+            tap_txn.setPayloadImageThumb(jsonTXNS.getJSONObject(i).getString("payload_thumb"));
+            tap_txn.setUserThumb(jsonTXNS.getJSONObject(i).getString("other_user_thumb"));
+            tap_txn.setMessage(jsonTXNS.getJSONObject(i).getString("comment"));
+            tap_txn.setTxnDate(jsonTXNS.getJSONObject(i).getString("date"));
+            tap_txn.setTXNamountSatoshi(jsonTXNS.getJSONObject(i).getInt("satoshi_amount"));
+
+
+            mTapTxns.add(tap_txn);
+           // mtagMap.put(jsonTags.getJSONObject(i).getString("id"), jsonTags.getJSONObject(i).getString("name"));
+        }
+
+
 
     }
     catch (Exception e)
@@ -237,7 +274,7 @@ public class TapUser {
             output = mTapCloud.httpPut(TapCloud.TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
 //            mAuthToken = output.getJSONObject("response").getString("auth_token");
 //            mNickName = output.getJSONObject("response").getString("nickname");
-            Log.e("bob","bob");
+            Log.e("bob", "bob");
         }
         catch (JSONException e) {
             e.printStackTrace();

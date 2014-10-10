@@ -36,8 +36,9 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tag);
 
-        Intent intent = getIntent();
-        mAuthToken = intent.getStringExtra("AuthToken");
+//        Intent intent = getIntent();
+//        mAuthToken = intent.getStringExtra("AuthToken");
+        mAuthToken = TapCloud.getAuthToken();
         //TODO: error checking to make sure auth token is not expired
         mTapUser = TapCloud.getTapUser(this);
         loadTags();
@@ -113,6 +114,8 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
         loadTags();
 
     }
+
+
     private class ImageAdapter extends BaseAdapter {
         private Context mContext;
         private Map<String, String> mTagMapImg;
