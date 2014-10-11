@@ -1,9 +1,8 @@
 package co.tapdatapp.tapandroid;
 
-
-
+import android.app.Activity;
 import android.app.DialogFragment;
-import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,15 +13,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
+import co.tapdatapp.tapandroid.service.TapUser;
 
 
-/**
- * A simple {@link Fragment} subclass.
- *
- */
-public class ArmedFragment extends DialogFragment {
+public class DepositFragment extends DialogFragment {
+
     private String mAuthToken;
-    private float mAmount;
+
 
     public  void setValues (String message, String payload_url){
 
@@ -34,31 +31,35 @@ public class ArmedFragment extends DialogFragment {
 
     }
 
-    public ArmedFragment() {
+    public DepositFragment() {
         // Required empty public constructor
     }
-    public ArmedFragment(String auth_token, float amount) {
-            mAuthToken = auth_token;
-            mAmount = amount;
+    public DepositFragment(String auth_token ) {
+        mAuthToken = auth_token;
+
         // Required empty public constructor
     }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
-        return inflater.inflate(R.layout.fragment_armed, container, false);
+        return inflater.inflate(R.layout.fragment_deposit, container, false);
+    }
 
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
     @Override
     public void onResume(){
         super.onResume();
-        TextView tv = (TextView)  getView().findViewById(R.id.txtFrag);
-        tv.setText( " About to TAP.  Tipping $" + mAmount);
+        TextView btcInbound = (TextView) getView().findViewById(R.id.txtInboundAddy);
+        TapUser mTapUser = TapCloud.getTapUser(getActivity());
+        String mBTCaddy = mTapUser.getBTCinbound();
+        ImageView iv = (ImageView) getView().findViewById(R.id.imgQRCODE);
+        iv.setImageDrawable(TapCloud.LoadImageFromWebOperations(mTapUser.getQR()));
+        btcInbound.setText("Send ALL of your bitcoin to: " + mBTCaddy);
     }
-
 
 }

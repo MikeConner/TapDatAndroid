@@ -35,12 +35,15 @@ public class TapUser {
     private String mProfilePicThumb;
     private String mProfilePicFull;
     private int mTxnCount =0;
-
+    private String mInboundQRcodePicture;
 
     private ArrayList<TapTxn> mTapTxns = new ArrayList<TapTxn>();
 
 
-
+    public int getSatoshiBalance()
+    {
+        return mBalance;
+    }
     public int TxnCount() {
         if (mTapTxns == null){
             return 0;
@@ -135,10 +138,15 @@ public class TapUser {
             mUserEmail = output.getJSONObject("response").getString("email");
             mProfilePicFull = output.getJSONObject("response").getString("profile_image");
             mProfilePicThumb = output.getJSONObject("response").getString("profile_thumb");
+            mInboundQRcodePicture = output.getJSONObject("response").getJSONObject("inbound_btc_qrcode").getJSONObject("inbound_btc_qrcode").getString("url");
+            //for debuggin'
+           // String b = "bob";
+
         }
         catch (Exception e)
         {
             //TODO: any errors possible here?
+            Log.e(e.toString(),e.toString());
         }
     }
 
@@ -314,6 +322,9 @@ public class TapUser {
     }
 
 
+    public String getQR() {
+        return mInboundQRcodePicture;
+    }
 
     public String getEmail(){
         return mUserEmail;

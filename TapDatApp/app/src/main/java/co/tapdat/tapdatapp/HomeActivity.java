@@ -239,7 +239,7 @@ public void goToSettings (View view){
     Intent i = new Intent(this, AccountActivity.class);
     i.putExtra("AuthToken", mAuthToken);
     startActivity(i);
-}
+}git
 
 public void goToTap (View view){
     Intent i = new Intent(this, TapArm.class);

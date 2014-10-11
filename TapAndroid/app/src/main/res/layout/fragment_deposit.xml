@@ -1,0 +1,26 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="co.tapdatapp.tapandroid.DepositFragment">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="36dp"
+        android:text="Send Bitcoin To"
+        android:id="@+id/txtInboundAddy"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp" />
+
+    <ImageView
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:id="@+id/imgQRCODE"
+        android:src="@drawable/ic_grid"
+        android:layout_below="@+id/txtInboundAddy"
+        android:layout_centerHorizontal="true" />
+
+</RelativeLayout>

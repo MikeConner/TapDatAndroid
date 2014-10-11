@@ -5,20 +5,86 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="257dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ivRefreshBalance"
+            android:src="@drawable/ic_action_refresh"
+
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true" />
 
         <ImageView
                     android:layout_width="135dp"
                     android:layout_height="135dp"
                     android:id="@+id/imageView"
                     android:layout_column="1"
-                    android:src="@drawable/ic_launcher"
+                    android:src="@drawable/ic_action_person"
                     android:layout_span="1"
-                    android:onClick="getImage"/>
+                    android:onClick="getImage"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true" />
+
+        <EditText
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"
+                    android:ems="10"
+                    android:id="@+id/etNickName"
+                    android:layout_row="2"
+                    android:layout_column="6"
+                    android:text="NickName..."
+            android:layout_below="@+id/imageView"
+            android:layout_centerHorizontal="true"
+            android:editable="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Balance: 0 BTC ($0.0)"
+            android:id="@+id/txtBalance"
+            android:layout_column="1"
+            android:layout_span="5"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/ivRefreshBalance"
+            android:layout_alignBottom="@+id/ivRefreshBalance"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp" />
+
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text="Email Addy..."
+            android:ems="10"
+            android:id="@+id/etEmail"
+            android:layout_row="9"
+            android:layout_column="7"
+            android:editable="false"
+            android:layout_weight="1"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/etNickName" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView6"
+            android:layout_alignParentBottom="true"
+            android:layout_toStartOf="@+id/etNickName"
+            android:src="@drawable/ic_action_refresh"
+            android:onClick="newNickNameMe" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
 
         <LinearLayout
             android:orientation="vertical"
@@ -31,45 +97,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                            android:layout_width="179dp"
-                            android:layout_height="wrap_content"
-                            android:inputType="textEmailAddress"
-                            android:ems="10"
-                            android:id="@+id/etNickName"
-                            android:layout_row="2"
-                            android:layout_column="6"
-                            android:text="NickName..." />
-
-                <ImageButton
-                    android:layout_width="34dp"
-                    android:layout_height="36dp"
-                    android:id="@+id/imageButton"
-                    android:src="@drawable/ic_action_refresh"
-                    android:onClick="newNickNameMe"
-                     />
-
             </LinearLayout>
-
-            <EditText
-                        android:layout_width="225dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:text="Email Addy..."
-                        android:ems="10"
-                        android:id="@+id/etEmail"
-                        android:layout_row="9"
-                        android:layout_column="7" />
-
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="YOUR TAGS"
-                android:id="@+id/btnTags"
-                android:background="#ff333234"
-                android:textColor="#ffffffff"
-                android:layout_column="1"
-                android:onClick="myTags" />
 
         </LinearLayout>
 
@@ -96,64 +124,76 @@
                     android:layout_height="wrap_content"
                     android:weightSum="1">
 
-                    <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Balance: 0 BTC ($0.0)"
-                            android:id="@+id/txtBalance"
-                            android:layout_column="1"
-                            android:layout_span="5" />
-
-                    <ImageButton
-                        android:layout_width="18dp"
-                        android:layout_height="26dp"
-                        android:id="@+id/imageButton2"
-                        android:src="@drawable/ic_action_refresh"
-
-                        android:layout_gravity="right"
-                        android:layout_weight="0.25" />
-
                 </LinearLayout>
 
-                <TextView
-                        android:layout_width="187dp"
-                        android:layout_height="wrap_content"
-                        android:text="Load Address: 1z93kf9923r23jjsd9vjam3ijfq0934jf0"
-                        android:id="@+id/tvLoadAdd"
-                        android:layout_column="1"
-                        android:layout_span="5" />
-
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/etWithdraw"
-                    android:text="Withdrawl Address..."
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:enabled="true"
-                    android:inputType="text" />
-
             </LinearLayout>
-
-            <ImageView
-                android:layout_width="124dp"
-                android:layout_height="110dp"
-                android:id="@+id/imageView2"
-                android:src="@drawable/ic_launcher"
-                android:layout_gravity="right" />
 
         </LinearLayout>
     </FrameLayout>
 
-    <Button
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="2dp"
+            android:background="#ff212121"
+            android:layout_above="@+id/imageView3"
+            android:id="@+id/frameLayout"></FrameLayout>
+
+        <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="WITHDRAW"
-            android:id="@+id/btnWithdraw"
+            android:text="My Tags"
+            android:id="@+id/btnTags"
             android:background="#ff333234"
             android:textColor="#ffffffff"
-            android:layout_column="2"
-        android:onClick="writeUser" />
+            android:layout_column="1"
+            android:onClick="myTags"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true" />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="137dp"
+            android:id="@+id/imageView3"
+            android:src="@drawable/ic_grid"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.19"
+            android:onClick="showDeposit"
+            android:layout_above="@+id/btnTags"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="10dp" />
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="84dp"
+            android:id="@+id/imageView4"
+            android:src="@drawable/ic_action_upload"
+            android:clickable="true"
+            android:layout_gravity="center_vertical|right"
+            android:layout_above="@+id/btnTags"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/imageView3"
+            android:layout_marginRight="15dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="showWithdraw" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/etWithdraw"
+            android:text="Withdrawl Address..."
+            android:clickable="true"
+            android:focusable="true"
+            android:enabled="true"
+            android:inputType="text"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/imageView3" />
+
+    </RelativeLayout>
 
 
 </LinearLayout>

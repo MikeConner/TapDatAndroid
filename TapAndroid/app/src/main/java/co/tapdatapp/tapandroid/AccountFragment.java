@@ -1,26 +1,15 @@
 package co.tapdatapp.tapandroid;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.io.InputStream;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
@@ -29,13 +18,13 @@ import co.tapdatapp.tapandroid.service.TapUser;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link Account.OnFragmentInteractionListener} interface
+ * {@link AccountFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link Account#newInstance} factory method to
+ * Use the {@link AccountFragment#newInstance} factory method to
  * create an instance of this fragment.
  *
  */
-public class Account extends Fragment {
+public class AccountFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -54,18 +43,18 @@ public class Account extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment Account.
+     * @return A new instance of fragment AccountFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static Account newInstance(String param1, String param2) {
-        Account fragment = new Account();
+    public static AccountFragment newInstance(String param1, String param2) {
+        AccountFragment fragment = new AccountFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
-    public Account() {
+    public AccountFragment() {
         // Required empty public constructor
     }
     public void setTapUser(TapUser tap_user){
@@ -80,7 +69,7 @@ public class Account extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-       // Toast.makeText(getActivity(), (CharSequence)("Howdy Account"), Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getActivity(), (CharSequence)("Howdy AccountFragment"), Toast.LENGTH_SHORT).show();
 
     }
     @Override
@@ -93,10 +82,20 @@ public class Account extends Fragment {
         nickName.setText( mTapUser.getNickname());
 
         EditText email = (EditText)getActivity().findViewById(R.id.etEmail);
-        email.setText(mTapUser.getEmail());
+        String mEmailAddy = mTapUser.getEmail();
+        if (mEmailAddy.equals("")){
+            email.setText("your@email.addy");
+        }else
+        {
+            email.setText(mTapUser.getEmail());
 
-        TextView btcInbound = (TextView)getActivity().findViewById(R.id.tvLoadAdd);
-        btcInbound.setText("Load Address: " + mTapUser.getBTCinbound());
+        }
+        email.setEnabled(false);
+        nickName.setEnabled(false);
+        TextView balance = (TextView) getActivity().findViewById(R.id.txtBalance);
+        balance.setText("Balance: " +  String.valueOf(mTapUser.getSatoshiBalance()) + " Satoshi!");
+
+
 
         //TODO:UPDATE THIS TO THUMBNAIL!!!!
         new TapCloud.DownloadImageTask((ImageView) getActivity().findViewById(R.id.imageView))
@@ -155,29 +154,6 @@ public class Account extends Fragment {
         // TODO: Update argument type and name
         public void onFragmentInteraction(Uri uri);
     }
-   /* private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        ImageView bmImage;
 
-        public DownloadImageTask(ImageView bmImage) {
-            this.bmImage = bmImage;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e("Error", e.getMessage());
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
-        }
-    }*/
 
 }

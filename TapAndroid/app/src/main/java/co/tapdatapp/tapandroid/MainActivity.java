@@ -2,9 +2,6 @@ package co.tapdatapp.tapandroid;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URI;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +10,6 @@ import java.util.Locale;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -24,7 +20,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
@@ -32,7 +27,6 @@ import android.media.ExifInterface;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NfcAdapter;
-import android.os.AsyncTask;
 import android.os.Environment;
 import android.os.Parcelable;
 import android.os.StrictMode;
@@ -40,7 +34,6 @@ import android.provider.MediaStore;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -54,23 +47,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.internal.Constants;
-import com.amazonaws.services.s3.model.Bucket;
-import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
-
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
-import co.tapdatapp.tapandroid.service.TapTag;
 import co.tapdatapp.tapandroid.service.TapTxn;
 
 
 
-public class MainActivity extends Activity implements Account.OnFragmentInteractionListener, History.OnFragmentInteractionListener, Arm.OnFragmentInteractionListener, ActionBar.TabListener {
+public class MainActivity extends Activity implements AccountFragment.OnFragmentInteractionListener, History.OnFragmentInteractionListener, Arm.OnFragmentInteractionListener, ActionBar.TabListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SectionsPagerAdapter mSectionsPagerAdapter;
@@ -318,7 +301,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
             Fragment frag;
             switch (position) {
                 case 0:
-                    frag = new Account().newInstance("1","2");
+                    frag = new AccountFragment().newInstance("1","2");
                     //frag = mAccountFrag;
                     break;
                 case 1:
@@ -387,8 +370,6 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
     }
 
-
-
     public void getImage(View view){
 
         // Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -415,7 +396,6 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         mCurrentPhotoPath = "file:" + image.getAbsolutePath();
         return image;
     }
-
     private void selectImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
@@ -534,22 +514,19 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         mImageView.setImageBitmap(bitmap);
     }
 
-
-
-
     public   TapUser getUserContext(){
         return mTapUser;
     }
 
 
 
+
+    //ARM SCREEN
     public void armOrSend(View v){
         mArmed=true;
-        showDialog();
-
+        showArmedDialog();
     }
-
-    void showDialog() {
+    void showArmedDialog() {
      //  mStackLevel++;
 
         // DialogFragment.show() will take care of adding the fragment
@@ -566,7 +543,6 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
         mArmFrag =  new ArmedFragment(mAuthToken, fAmount);
         mArmFrag.show(ft, "dialog");
     }
-
     private void changeAmount(int change_value, boolean addition){
         if (addition) {
             fUnit = change_value;
@@ -652,13 +628,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
     }
 
 
-
-
-
-
-
-
-
+    //NFC STUFF
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -701,7 +671,7 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
 
 
-
+    //HISTORY STUFF
     private void loadTxnHistory(){
         TapUser mTapUser = TapCloud.getTapUser(MainActivity.this);
         mTapUser.loadTxns(TapCloud.getAuthToken());
@@ -774,4 +744,38 @@ public class MainActivity extends Activity implements Account.OnFragmentInteract
 
     }
 
+
+    //ACCOUNT Stuff
+    public void showDeposit(View view){
+        //show fragment with qr code and details
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("deposit");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+
+        DepositFragment mDepositFrag =  new DepositFragment();
+        mDepositFrag.show(ft, "deposit");
+    }
+    public void showWithdraw(View view){
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("withdraw");
+        if (prev != null) {
+            ft.remove(prev);
+        }
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+
+        WithdrawFragment mWithdrawFrag =  new WithdrawFragment();
+        mWithdrawFrag.show(ft, "withdraw");
+
+    }
+    public void doWithdraw(View view)
+    {
+        Toast.makeText(MainActivity.this,"your money is coming",Toast.LENGTH_LONG);
+    }
 }
