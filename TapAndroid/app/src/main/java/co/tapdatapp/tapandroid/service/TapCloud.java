@@ -16,10 +16,14 @@ import android.widget.ImageView;
 
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.ResponseHeaderOverrides;
+import com.amazonaws.util.IOUtils;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -98,6 +102,14 @@ public class TapCloud {
             mTapUser = new TapUser();
         }
         return mTapUser;
+    }
+    private static AmazonS3Client mS3Client;
+    private static AmazonS3Client myS3()
+    {
+        if (mS3Client == null){
+            mS3Client = new AmazonS3Client( new BasicAWSCredentials( TapCloud.MY_ACCESS_KEY_ID, TapCloud.MY_SECRET_KEY ) );
+        }
+        return mS3Client;
     }
     public JSONObject httpPut(String url, JSONObject json){
         //TODO: Create this one time in class instantiation vs. here and destory later
@@ -213,7 +225,8 @@ public class TapCloud {
     public String uploadToS3withURI(Uri mURI, String s3_key, Context mContext){
         //String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
         //String MY_SECRET_KEY = "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";
-        AmazonS3Client s3Client = new AmazonS3Client( new BasicAWSCredentials( TapCloud.MY_ACCESS_KEY_ID, TapCloud.MY_SECRET_KEY ) );
+        AmazonS3Client s3Client = myS3();
+                //new AmazonS3Client( new BasicAWSCredentials( TapCloud.MY_ACCESS_KEY_ID, TapCloud.MY_SECRET_KEY ) );
         //Bucket b =  s3Client.createBucket( "test" );
         String c = getRealPathFromURI(mContext, mURI);
 
@@ -225,6 +238,43 @@ public class TapCloud {
         return s3Client.getResourceUrl(TapCloud.TAP_S3_BUCK, s3_key);
 
     }
+
+    public String uploadToS3withStream(byte[] thumb, String s3_key, Context mContext){
+        //String MY_ACCESS_KEY_ID = "AKIAJOXBJKXXTLB2MXXQ";
+        //String MY_SECRET_KEY = "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";
+        AmazonS3Client s3Client = myS3();
+                //new AmazonS3Client( new BasicAWSCredentials( TapCloud.MY_ACCESS_KEY_ID, TapCloud.MY_SECRET_KEY ) );
+        String mURL = "";
+
+
+        try {
+            Long contentLength = Long.valueOf(thumb.length) ;
+//            Bitmap thumbnail = BitmapFactory.decodeByteArray(thumb, 0, thumb.length);
+//            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//            thumbnail.compress(Bitmap.CompressFormat.PNG, 0 /*ignored for PNG*/, bos);
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(thumb);
+
+            ObjectMetadata metadata = new ObjectMetadata();
+            metadata.setContentLength(contentLength);
+
+            PutObjectRequest por = new PutObjectRequest( TapCloud.TAP_S3_BUCK, s3_key, inputStream, metadata );
+            s3Client.putObject( por );
+            ResponseHeaderOverrides override = new ResponseHeaderOverrides();
+            override.setContentType("image/jpeg");
+            mURL= s3Client.getResourceUrl(TapCloud.TAP_S3_BUCK, s3_key);
+        }
+        catch (Exception e){
+            Log.e ("error", e.toString());
+        }
+
+
+        return mURL;
+
+
+
+
+    }
+
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {

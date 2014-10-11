@@ -72,6 +72,10 @@
                 android:src="@drawable/ic_launcher"
                 android:layout_weight="0.69" />
 
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"></TableRow>
+
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

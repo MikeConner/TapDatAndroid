@@ -94,12 +94,19 @@ public class AccountFragment extends Fragment {
         nickName.setEnabled(false);
         TextView balance = (TextView) getActivity().findViewById(R.id.txtBalance);
         balance.setText("Balance: " +  String.valueOf(mTapUser.getSatoshiBalance()) + " Satoshi!");
+        ImageView ivProfilePic = (ImageView) getActivity().findViewById(R.id.imageView);
+        String mThumb = mTapUser.getProfilePicThumb();
+        if (mThumb.equals("") || mThumb.equals("null")){
+            //do nothing or set it to some image?
+        }
+        else{
+            //TODO: Check to see if we've already done this.. if not get it again
+                 new TapCloud.DownloadImageTask(ivProfilePic)
+                          .execute(mTapUser.getProfilePicThumb());
+
+        }
 
 
-
-        //TODO:UPDATE THIS TO THUMBNAIL!!!!
-        new TapCloud.DownloadImageTask((ImageView) getActivity().findViewById(R.id.imageView))
-                .execute(mTapUser.getProfilePicFull());
 
     }
     @Override

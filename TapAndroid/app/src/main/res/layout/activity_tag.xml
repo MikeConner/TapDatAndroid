@@ -10,7 +10,7 @@
     android:id="@+id/tagContainer">
 
 
-    <fragment android:name="co.tapdatapp.tapandroid.Tags"
+    <fragment android:name="co.tapdatapp.tapandroid.TagsFragment"
         android:id="@+id/tagFrag"
         android:layout_weight="1"
         android:layout_width="match_parent"

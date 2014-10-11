@@ -1,8 +1,6 @@
 package co.tapdatapp.tapandroid;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -19,13 +17,12 @@ import android.widget.Toast;
 
 import java.util.Map;
 
-import co.tapdatapp.tapandroid.Tags;
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapTag;
 import co.tapdatapp.tapandroid.service.TapUser;
 
 
-public class TagActivity extends Activity implements Tags.OnFragmentInteractionListener {
+public class TagActivity extends Activity implements TagsFragment.OnFragmentInteractionListener {
     private String mAuthToken;
     private TapUser mTapUser;
     private TapTag mTapTag;
@@ -41,10 +38,14 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
         mAuthToken = TapCloud.getAuthToken();
         //TODO: error checking to make sure auth token is not expired
         mTapUser = TapCloud.getTapUser(this);
-        loadTags();
+//        loadTags();
 
     }
-
+    @Override
+    public void onResume(){
+        super.onResume();
+        loadTags();
+    }
 
     private void loadTags(){
         if (!mAuthToken.isEmpty()) {
@@ -57,7 +58,7 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
             gridview.setAdapter(imgAdp);
             gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    Toast.makeText(TagActivity.this, "" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
+                   // Toast.makeText(TagActivity.this, "" + parent.getItemAtPosition(position).toString(), Toast.LENGTH_SHORT).show();
                     writeThisTag(mAuthToken, parent.getItemAtPosition(position).toString());
 
 
@@ -110,7 +111,7 @@ public class TagActivity extends Activity implements Tags.OnFragmentInteractionL
     }
     public void makeNewTag(View view){
         mTapTag = new TapTag();
-        mTapTag.generateNewTag(mAuthToken);
+        mTapTag.generateNewTag(mAuthToken, TapCloud.getTapUser(this).getProfilePicThumb());
         loadTags();
 
     }

@@ -240,24 +240,7 @@ public class TapUser {
         mOutboundBTCaddress = new_outbound_btc_address;
 
         UpdateUser(mAuthToken);
-/*        JSONObject user = new JSONObject();
-        JSONObject json = new JSONObject();
-        JSONObject output;
-        try {
-            user.put("email", mUserEmail);
-            user.put("name", mNickName);
-            user.put("outbound_btc_address", mOutboundBTCaddress);
 
-            json.put("user", user);
-            output = mTapCloud.httpPut(TapCloud.TAP_USER_API_ENDPOINT_URL + ".json?auth_token=" + mAuthToken, json);
-//            mAuthToken = output.getJSONObject("response").getString("auth_token");
-//            mNickName = output.getJSONObject("response").getString("nickname");
-            Log.e("bob","bob");
-        }
-        catch (JSONException e) {
-            e.printStackTrace();
-            Log.e("JSON", "" + e);
-        }*/
     }
 
     public void UpdateUser(String auth_token){
@@ -271,11 +254,18 @@ public class TapUser {
         JSONObject json = new JSONObject();
         JSONObject output;
         try {
-            user.put("email", mUserEmail);
+            if (mUserEmail.equals("")){
+                user.put("email", "your@email.addy");
+            }else {
+
+                user.put("email", mUserEmail);
+            }
+
             user.put("name", mNickName);
             user.put("outbound_btc_address", mOutboundBTCaddress);
             user.put("mobile_profile_image_url", mProfilePicFull);
-    //        user.put("mobile_profile_thumb_url", mProfilePicThumb);
+            user.put("mobile_profile_thumb_url", mProfilePicThumb);
+
 
             json.put("user", user);
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
@@ -296,7 +286,6 @@ public class TapUser {
     }
     public void setProfilePicThumb(String new_value){
         mProfilePicThumb = new_value;
-//        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
 
 
@@ -306,7 +295,7 @@ public class TapUser {
     }
     public void setProfilePicFull(String new_value){
         mProfilePicFull  = new_value;
-//        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
+
     }
 
 

@@ -19,6 +19,9 @@ public class TapTag {
     private ArrayList<TapYapa> mTapYapas = new ArrayList<TapYapa>();
 
 
+    public ArrayList<TapYapa> myYappas(){
+        return mTapYapas;
+    }
 
     public int YapaCount() {
         if (mTapYapas == null){
@@ -45,7 +48,8 @@ public class TapTag {
                 payload.put("uri", mYapa.getURL());
                 payload.put("content", mYapa.getContent());
                 payload.put("threshold", mYapa.getThreshold());
-
+                payload.put("mobile_payload_image_url", mYapa.getFullYapa());
+                payload.put("mobile_payload_thumb_url", mYapa.getThumbYapa());
 
                 json.put("auth_token", mAuthToken);
                 json.put("tag_id", mTagID.replaceAll("-",""));
@@ -159,13 +163,13 @@ public class TapTag {
             //TODO: any errors possible here?
         }
 
-
+        loadYapa(auth_token);
 
 
 
 
     }
-    public String generateNewTag(String auth_token){
+    public String generateNewTag(String auth_token, String default_yapa_thumb){
         mAuthToken = auth_token;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
@@ -189,6 +193,14 @@ public class TapTag {
             e.printStackTrace();
             Log.e("JSON", "" + e);
         }
+
+        //generate first Yapa!
+        TapYapa new_yapa = new TapYapa();
+        new_yapa.setContent("Say something funny or meaningful.  You're getting TAPPED!");
+        new_yapa.setThreshold(1);
+        //TODO: Make this a default no yapa image on AWS
+        new_yapa.setThumbYapa(default_yapa_thumb);
+        addYapa(mAuthToken, new_yapa);
 
         return mTagID;
     }

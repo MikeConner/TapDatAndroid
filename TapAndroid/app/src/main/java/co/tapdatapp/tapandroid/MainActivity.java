@@ -53,7 +53,7 @@ import co.tapdatapp.tapandroid.service.TapTxn;
 
 
 
-public class MainActivity extends Activity implements AccountFragment.OnFragmentInteractionListener, History.OnFragmentInteractionListener, Arm.OnFragmentInteractionListener, ActionBar.TabListener {
+public class MainActivity extends Activity implements AccountFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, ArmFragment.OnFragmentInteractionListener, ActionBar.TabListener {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     SectionsPagerAdapter mSectionsPagerAdapter;
@@ -283,7 +283,7 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         return super.onOptionsItemSelected(item);
     }
 
-    
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -305,11 +305,11 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
                     //frag = mAccountFrag;
                     break;
                 case 1:
-                    frag = new Arm().newInstance("1","2");
+                    frag = new ArmFragment().newInstance("1","2");
                    // frag = mTapFrag;
                     break;
                 case 2:
-                    frag = new History().newInstance("1","2");
+                    frag = new HistoryFragment().newInstance("1","2");
                     //frag = mHistoryFrag ;
                     break;
 
@@ -348,7 +348,7 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
 
 
     public void myTags(View view){
-        Tags mTags = new Tags();
+        TagsFragment mTags = new TagsFragment();
         Intent i = new Intent(this,TagActivity.class);
         i.putExtra("AuthToken", mAuthToken);
         startActivity(i);
@@ -454,23 +454,20 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
                 setPic();
             }
             else {
-//            Bundle b = data.getExtras();
-           //     Bundle extras = data.getData();
                 Uri mContentURI = data.getData();
-                //         String mRealPath = getRealPathFromURI(mContentURI);
-//            Bitmap imageBitmap = (Bitmap)
                 ImageView mImageView = (ImageView) findViewById(R.id.imageView);
-//                mImageView.setImageURI(mContentURI);
-
-                String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
+                String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16) +".jpg", this);
                 String newFUllImagePath = TapCloud.getRealPathFromURI(this,mContentURI);
-
-
+                String newThumbImageURL = "";
                 try {
                     ExifInterface exif = new ExifInterface(newFUllImagePath);
                     byte[] imageData = exif.getThumbnail();
                     Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
                     mImageView.setImageBitmap(thumbnail);
+
+                     newThumbImageURL = mTapCloud.uploadToS3withStream(imageData, TapUser.getRandomString(16) + ".jpg", this);
+
+
                 }
                 catch (Exception e){
                     //TODO: not sure what to catch here?
@@ -481,9 +478,9 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
 
 
                 mTapUser.setProfilePicFull(newFullImageURL );
-               // mTapUser.setProfilePicThumb(newThumbImageURL );
+                mTapUser.setProfilePicThumb(newThumbImageURL );
 
-                //TODO: THUMB IS NOT SET YET>. get THUMB
+
                 mTapUser.UpdateUser(mAuthToken);
 
             }
@@ -498,7 +495,7 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         // Get the dimensions of the bitmap
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
-        Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        //Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
@@ -774,8 +771,5 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         mWithdrawFrag.show(ft, "withdraw");
 
     }
-    public void doWithdraw(View view)
-    {
-        Toast.makeText(MainActivity.this,"your money is coming",Toast.LENGTH_LONG);
-    }
+
 }

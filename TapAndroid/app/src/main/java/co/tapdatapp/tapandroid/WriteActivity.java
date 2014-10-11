@@ -17,10 +17,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapTag;
@@ -48,16 +50,10 @@ public class WriteActivity extends Activity {
         mTapTag.setTagID( intent.getStringExtra("TagID"));
         mTapTag.setTagName(intent.getStringExtra("TagName"));
         mTapTag.loadYapa(mAuthToken);
-        if(mTapTag.YapaCount() == 0){
-            TapYapa new_yapa = new TapYapa();
-            new_yapa.setContent("Enter Your message here");
-            new_yapa.setThreshold(1);
-            //TODO: Make this a default no yapa image on AWS
-            new_yapa.setURL(TapCloud.getTapUser(this).getProfilePicFull());
-            mTapTag.addYapa(mAuthToken, new_yapa);
 
-            //make a new yapa for default!
-            String b = "Sdfdsfsd";
+        //if first time creation, going to create a yapa from thumbnail image
+        if(mTapTag.YapaCount() == 0){
+
 
         }
     }
@@ -68,7 +64,15 @@ public class WriteActivity extends Activity {
         edName.setText(mTapTag.getTagName());
         TextView tvID = (TextView) findViewById(R.id.tvID);
         tvID.setText(mTapTag.getTagID());
+        ImageView iv = (ImageView) findViewById(R.id.imageView);
+        ArrayList<TapYapa> myYappas = mTapTag.myYappas();
 
+        EditText edMessage = (EditText) findViewById(R.id.dtYapaMessage);
+        edMessage.setText(myYappas.get(0).getContent());
+        if(myYappas.size() > 0) {
+            new TapCloud.DownloadImageTask(iv)
+                    .execute(myYappas.get(0).getThumbYapa());
+        }
         edName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -76,8 +80,20 @@ public class WriteActivity extends Activity {
                     EditText g = (EditText) v;
 
                     mTapTag.updateTag(mAuthToken,mTapTag.getTagID().replaceAll("-",""), g.getText().toString() );
-                    Toast.makeText(WriteActivity.this, "lost it", Toast.LENGTH_LONG);
+//                    Toast.makeText(WriteActivity.this, "lost it", Toast.LENGTH_LONG);
                 }
+            }
+        });
+
+        edMessage.setOnFocusChangeListener( new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus){
+                if (!hasFocus){
+                    EditText g = (EditText) v;
+                    mTapTag.myYappas().get(0).setContent("booya");
+                    mTapTag.myYappas().get(0).updateYapa(mAuthToken);
+                }
+
             }
         });
     }
