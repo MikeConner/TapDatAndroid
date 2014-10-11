@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.nfc.NfcAdapter;
@@ -13,6 +14,7 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -51,11 +54,7 @@ public class WriteActivity extends Activity {
         mTapTag.setTagName(intent.getStringExtra("TagName"));
         mTapTag.loadYapa(mAuthToken);
 
-        //if first time creation, going to create a yapa from thumbnail image
-        if(mTapTag.YapaCount() == 0){
 
-
-        }
     }
     @Override
     public void onResume(){
@@ -64,15 +63,9 @@ public class WriteActivity extends Activity {
         edName.setText(mTapTag.getTagName());
         TextView tvID = (TextView) findViewById(R.id.tvID);
         tvID.setText(mTapTag.getTagID());
-        ImageView iv = (ImageView) findViewById(R.id.imageView);
+
         ArrayList<TapYapa> myYappas = mTapTag.myYappas();
 
-        EditText edMessage = (EditText) findViewById(R.id.dtYapaMessage);
-        edMessage.setText(myYappas.get(0).getContent());
-        if(myYappas.size() > 0) {
-            new TapCloud.DownloadImageTask(iv)
-                    .execute(myYappas.get(0).getThumbYapa());
-        }
         edName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -85,27 +78,107 @@ public class WriteActivity extends Activity {
             }
         });
 
-        edMessage.setOnFocusChangeListener( new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus){
-                if (!hasFocus){
-                    EditText g = (EditText) v;
-                    mTapTag.myYappas().get(0).setContent("booya");
-                    mTapTag.myYappas().get(0).updateYapa(mAuthToken);
+        //first Yapa
+        if(myYappas.size() > 0) {
+            EditText edMessage = (EditText) findViewById(R.id.dtYapaMessage);
+            ImageView iv = (ImageView) findViewById(R.id.imageView);
+
+            edMessage.setText(myYappas.get(0).getContent());
+            new TapCloud.DownloadImageTask(iv)
+                    .execute(myYappas.get(0).getThumbYapa());
+
+
+            edMessage.setOnFocusChangeListener( new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus){
+                    if (!hasFocus){
+                        EditText g = (EditText) v;
+                        mTapTag.myYappas().get(0).setContent(((EditText) v).getText().toString());
+                        mTapTag.myYappas().get(0).updateYapa(mAuthToken, mTapTag.getTagID());
+                    }
+
                 }
+            });
+            //get the second on in here
+            if (myYappas.size() > 1){
+                EditText edMessageBonus = (EditText) findViewById(R.id.edBonusYapa);
+                ImageView ivBonus = (ImageView) findViewById(R.id.imageView2);
+
+                //threshhold
+                //text
+                //image
+
 
             }
-        });
+        }
+
+    }
+    public void saveMyYapa(View v){
+
+
     }
 
+    //Image stuff
+    public void selectImageYapa1(View v){
+        selectImage(0);
+    }
+    public void selectImageYapa2(View v){
+        selectImage(1);
+    }
+    private boolean mFromCamera = false;
+    private int mImageID = 0;
+    private void selectImage(int ImageID) {
+        mImageID = ImageID;
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(WriteActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    mFromCamera = true;
+                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                        File photoFile = null;
+    /*                    try {
+       //                     photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+
+                        }
+  */                      // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                                    Uri.fromFile(photoFile));
+//                            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                        }
+
+                    }
+                } else if (items[item].equals("Choose from Library")) {
+                    mFromCamera = false;
+                    Intent intent = new Intent(
+                            Intent.ACTION_PICK,
+                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType("image/*");
+                    startActivityForResult(intent , 1);//one can be replaced with any action code
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
+
+    }
+
+    //MENU STUFF
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.write, menu);
+        //getMenuInflater().inflate(R.menu.write, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -118,6 +191,8 @@ public class WriteActivity extends Activity {
         return super.onOptionsItemSelected(item);
 
     }
+
+    //NFC TAG STUFF
     public void startWrite (View view){
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(WriteActivity.this);
@@ -140,16 +215,12 @@ public class WriteActivity extends Activity {
         //  startActivity(i);
 
     }
-
-
-
     private void enableTagWriteMode() {
         mWriteMode = true;
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         IntentFilter[] mWriteTagFilters = new IntentFilter[] { tagDetected };
         mNfcAdapter.enableForegroundDispatch(this, mNfcPendingIntent, mWriteTagFilters, null);
     }
-
     private void disableTagWriteMode() {
         mWriteMode = false;
         mNfcAdapter.disableForegroundDispatch(this);
@@ -171,11 +242,6 @@ public class WriteActivity extends Activity {
             }
         }
     }
-
-
-    /*
-    * Writes an NdefMessage to a NFC tag
-    */
     public boolean writeDaTag(NdefMessage message, Tag tag) {
         int size = message.toByteArray().length;
         try {

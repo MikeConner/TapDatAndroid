@@ -59,7 +59,7 @@ public class TapCloud {
     //*/
     public final static String TAP_LOCAL = "192.168.1.135:3000";
     public final static String TAP_REMOTE = "www.tapdatapp.co";
-    public final static String TAP_SERVER = TAP_LOCAL;
+    public final static String TAP_SERVER = TAP_REMOTE;
 
 
     public final static String TAP_REGISTER_API_ENDPOINT_URL = "http://" + TAP_SERVER + "/mobile/1/registrations.json";

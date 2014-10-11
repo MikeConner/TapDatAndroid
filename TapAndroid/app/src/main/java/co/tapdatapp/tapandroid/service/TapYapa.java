@@ -83,36 +83,35 @@ public class TapYapa {
         mThreshold=new_value;
     }
 
-    public void updateYapa(String auth_token){
+    public void updateYapa(String auth_token, String tag_id){
         mAuthToken = auth_token;
 
         JSONObject json = new JSONObject();
+        JSONObject payload = new JSONObject();
+
         JSONObject output;
 
-        String mURL = TapCloud.TAP_ONE_YAPA_API_ENDPOINT_URL + "?auth_token=" + mAuthToken;
+        String mRemoteURL = TapCloud.TAP_ONE_YAPA_API_ENDPOINT_URL + mYapaID + ".json?auth_token=" + auth_token + "&tag_id=" + tag_id;
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
         mTapCloud = new TapCloud();
 
         try {
 
+            payload.put("threshold", mThreshold);
+            payload.put("content", mContent);
+            payload.put("uri", mURL);
+            payload.put("mobile_payload_image_url", mYapaURL);
+            payload.put("mobile_payload_thumb_url", mThumbnailURL);
+
             json.put("auth_token", mAuthToken);
-//            json.put("id", "0");
-
-
-
             json.put("id", mYapaID);
-            json.put("tag_id", mYapaID);
+            json.put("tag_id", tag_id);
+            json.put("payload", payload);
 
-            json.put("name", mThreshold);
-            json.put("name", mContent);
-            json.put("name", mURL);
-            json.put("name", mYapaURL);
-
-            json.put("name", mThumbnailURL);
 
 
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
-            output = mTapCloud.httpPut(mURL, json);
+            output = mTapCloud.httpPut(mRemoteURL, json);
             // = output.getJSONObject("response").getString("nickname");
             //CHECK FOR BAD CASES HERE!
         }

@@ -7,7 +7,7 @@
 
     <FrameLayout
         android:layout_width="fill_parent"
-        android:layout_height="70dp">
+        android:layout_height="61dp">
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -49,7 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.52">
+        android:layout_weight="0.63">
 
         <LinearLayout
             android:orientation="vertical"
@@ -59,9 +59,9 @@
             android:weightSum="1">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Default Yapa"
+                android:text="Default Yapa: $1"
                 android:id="@+id/txtViewYapa"
                 android:layout_gravity="center_horizontal" />
 
@@ -69,30 +69,75 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView"
-                android:src="@drawable/ic_launcher"
-                android:layout_weight="0.69" />
+                android:src="@drawable/ic_action_upload"
+                android:layout_weight="0.69"
+                android:onClick="selectImageYapa1" />
 
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"></TableRow>
+
 
             <EditText
-                android:layout_width="match_parent"
+                android:layout_width="335dp"
                 android:layout_height="wrap_content"
                 android:inputType="textMultiLine"
                 android:ems="10"
                 android:id="@+id/dtYapaMessage"
                 android:layout_gravity="center_horizontal"
-                android:layout_weight="0.35"
-                android:text="Your Yapa Message" />
+                android:text="Your Yapa Message"
+                android:background="#ffe7e7e7"
+                android:layout_weight="0.25" />
 
-            <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add Next Yapa"
-                android:id="@+id/btnYapaNext"
-                android:layout_gravity="center_horizontal" />
         </LinearLayout>
     </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="176dp"
+        android:layout_weight="0.33"
+        android:id="@+id/frameNother">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="209dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Bonus Yapa"
+                android:id="@+id/textView"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:layout_width="208dp"
+                android:layout_height="144dp"
+                android:id="@+id/imageView2"
+                android:src="@drawable/ic_action_upload"
+                android:layout_gravity="center_horizontal"
+                android:onClick="selectImageYapa2" />
+
+
+
+            <EditText
+                android:layout_width="334dp"
+                android:layout_height="52dp"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:id="@+id/edBonusYapa"
+                android:layout_gravity="center_horizontal"
+                android:text="Bonus Yapa Message"
+                android:background="#ffffea09" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="25dp"
+        android:text="Save"
+        android:id="@+id/btnSaveYappas"
+        android:background="#d3676767"
+        android:onClick="saveMyYapa" />
 
 </LinearLayout>
