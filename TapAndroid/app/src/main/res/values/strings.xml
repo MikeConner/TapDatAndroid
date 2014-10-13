@@ -12,4 +12,8 @@
     <string name="title_activity_tag">TagActivity</string>
     <string name="title_activity_write">WriteActivity</string>
 
+
+    <string name="load_address_text">load address:</string>
+
+    <string name="withdraw_address_text">withdraw address:</string>
 </resources>

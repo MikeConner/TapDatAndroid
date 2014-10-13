@@ -2,9 +2,11 @@ package co.tapdatapp.tapandroid;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +25,12 @@ public class DepositFragment extends DialogFragment {
 
     public  void setValues (String message, String payload_url){
 
-        TextView tv = (TextView) getView().findViewById(R.id.txtYap);
+      /*  TextView tv = (TextView) getView().findViewById(R.id.txtYap);
         ImageView iv = (ImageView) getView().findViewById(R.id.imageYapa);
         tv.setText(message);
         iv.setImageDrawable(TapCloud.LoadImageFromWebOperations(payload_url));
         iv.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
+*/
     }
 
     public DepositFragment() {
@@ -44,12 +46,20 @@ public class DepositFragment extends DialogFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        float densi = getActivity().getResources().getDisplayMetrics().density;
+     //   getDialog().getWindow().setLayout(width, height);
         return inflater.inflate(R.layout.fragment_deposit, container, false);
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME,android.R.style.Theme);
     }
     @Override
     public void onResume(){
@@ -59,7 +69,7 @@ public class DepositFragment extends DialogFragment {
         String mBTCaddy = mTapUser.getBTCinbound();
         ImageView iv = (ImageView) getView().findViewById(R.id.imgQRCODE);
         iv.setImageDrawable(TapCloud.LoadImageFromWebOperations(mTapUser.getQR()));
-        btcInbound.setText("Send ALL of your bitcoin to: " + mBTCaddy);
+        btcInbound.setText(  mBTCaddy);
     }
 
 }
