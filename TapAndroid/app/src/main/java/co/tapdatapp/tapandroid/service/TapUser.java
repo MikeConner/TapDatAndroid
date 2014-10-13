@@ -229,19 +229,6 @@ public class TapUser {
         return mtagMap;
     }
 
-    public void UpdateUser(String auth_token, String new_nickname, String new_email_address, String new_outbound_btc_address){
-        //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
-       // mTapCloud = new TapCloud();
-        //END
-
-        mAuthToken = auth_token;
-        mNickName = new_nickname;
-        mUserEmail = new_email_address;
-        mOutboundBTCaddress = new_outbound_btc_address;
-
-        UpdateUser(mAuthToken);
-
-    }
 
     public void UpdateUser(String auth_token){
         //TODO: This needs to move in to class instantiation, and we need to clean it up upon destroy
@@ -255,7 +242,7 @@ public class TapUser {
         JSONObject output;
         try {
             if (mUserEmail.equals("")){
-                user.put("email", "your@email.addy");
+//                user.put("email", "your@email.addy");
             }else {
 
                 user.put("email", mUserEmail);
@@ -307,7 +294,6 @@ public class TapUser {
     }
     public void setNickName(String mNewNickname){
         mNickName = mNewNickname;
-        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
 
 
@@ -320,21 +306,18 @@ public class TapUser {
     }
     public void setEmail(String mNewEmail){
         mUserEmail = mNewEmail;
-        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
     public String getBTCinbound(){
         return mInboundBTCaddress;
     }
     public void setBTCinbound(String mNewBTCinBound){
         mInboundBTCaddress = mNewBTCinBound;
-        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
     public String getBTCoutbound(){
         return mOutboundBTCaddress;
     }
     public void setBTCoutbound(String mNewBTCoutbound){
         mOutboundBTCaddress = mNewBTCoutbound;
-        UpdateUser(mAuthToken,mNickName,mUserEmail,mOutboundBTCaddress);
     }
 
 

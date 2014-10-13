@@ -18,11 +18,15 @@ public class TapTxn {
     private String mPayloadImageThumb = "";
     private String mUserImageThumb = "";
 
+
+
     private String mTagID;
     private TapCloud mTapCloud;
     private int mSatoshi;
     private String mMessage;
     private String mTxnDate;
+    private int mEndingUserBalanaceSatoshi = 0;
+
 
 
     public String getTxnDate(){
@@ -125,9 +129,19 @@ public class TapTxn {
 
             //TODO: Assuming success, but if it fails, we need to capture that and show an error or Try again?
             output = mTapCloud.httpPost(TapCloud.TAP_TXN_API_ENDPOINT_URL + "auth_token=" + auth_token, json);
-            mSatoshi = output.getJSONObject("response").getInt("satoshi");
+            mSatoshi = output.getJSONObject("response").getInt("satoshi_amount");
+            mAmountUSD = (float) (output.getJSONObject("response").getInt("dollar_amount") / 100);
+            mEndingUserBalanaceSatoshi = output.getJSONObject("response").getInt("final_balance");
+            mUserImageThumb = output.getJSONObject("response").getString("tapped_user_thumb");
+            mUserNickname = output.getJSONObject("response").getString("tapped_user_name");
+
+
             mPayloadURL = output.getJSONObject("response").getJSONObject("payload").getString("uri");
             mMessage = output.getJSONObject("response").getJSONObject("payload").getString("text");
+            mPayloadImageThumb = output.getJSONObject("response").getJSONObject("payload").getString("thumb");
+            mPayloadImage = output.getJSONObject("response").getJSONObject("payload").getString("image");
+
+
 
 //            /{"response":{"satoshi":936593,"payload":{"uri":"https:\/\/s3.amazonaws.com\/tapyapa\/new_key_needed","text":"Enter Your message here"}}}
             String b = "sdlfkjsdf";

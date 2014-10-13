@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 /**
@@ -78,10 +79,10 @@ public class AccountFragment extends Fragment {
         MainActivity ma =  (MainActivity) getActivity();
         mTapUser=  ma.getUserContext();
 
-        EditText nickName = (EditText)  getActivity().findViewById(R.id.etNickName);
+        TextView nickName = (TextView)  getActivity().findViewById(R.id.etNickName);
         nickName.setText( mTapUser.getNickname());
 
-        EditText email = (EditText)getActivity().findViewById(R.id.etEmail);
+        TextView email = (TextView)getActivity().findViewById(R.id.etEmail);
         String mEmailAddy = mTapUser.getEmail();
         if (mEmailAddy.equals("")){
             email.setText("your@email.addy");
@@ -93,8 +94,9 @@ public class AccountFragment extends Fragment {
         email.setEnabled(false);
         nickName.setEnabled(false);
         TextView balance = (TextView) getActivity().findViewById(R.id.txtBalance);
-        balance.setText("Balance: " +  String.valueOf(mTapUser.getSatoshiBalance()) + " Satoshi!");
-        ImageView ivProfilePic = (ImageView) getActivity().findViewById(R.id.imageView);
+        balance.setText(  String.valueOf(mTapUser.getSatoshiBalance()) + " S");
+      //  ImageView ivProfilePic = (ImageView) getActivity().findViewById(R.id.imageView);
+        CircleImageView ivProfilePic = (CircleImageView) getActivity().findViewById(R.id.profile_image);
         String mThumb = mTapUser.getProfilePicThumb();
         if (mThumb.equals("") || mThumb.equals("null")){
             //do nothing or set it to some image?

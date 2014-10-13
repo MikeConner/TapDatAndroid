@@ -48,6 +48,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 //TODO: All network should be done async
 //TODO: remove strict Mode
@@ -318,7 +320,13 @@ public class TapCloud {
 
     public static class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
+        CircleImageView cmImage;
+        boolean useCirle = false;
 
+        public DownloadImageTask (CircleImageView bmImage){
+            useCirle = true;
+            this.cmImage = bmImage;
+        }
         public DownloadImageTask(ImageView bmImage) {
             this.bmImage = bmImage;
         }
@@ -337,7 +345,12 @@ public class TapCloud {
         }
 
         protected void onPostExecute(Bitmap result) {
-            bmImage.setImageBitmap(result);
+            if (useCirle){
+                cmImage.setImageBitmap(result);
+            }else{
+                bmImage.setImageBitmap(result);
+            }
+
         }
     }
 }

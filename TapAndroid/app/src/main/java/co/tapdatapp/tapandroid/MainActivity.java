@@ -50,7 +50,7 @@ import android.widget.Toast;
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
 import co.tapdatapp.tapandroid.service.TapTxn;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends Activity implements AccountFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, ArmFragment.OnFragmentInteractionListener, ActionBar.TabListener {
@@ -355,16 +355,16 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
 
     }
     public void newNickNameMe(View view){
-        EditText et = (EditText) findViewById(R.id.etNickName);
+        TextView et = (TextView) findViewById(R.id.etNickName);
         et.setText(        mTapUser.getNewNickname(mAuthToken));
 
     }
     public void writeUser(View view){
         EditText edName = (EditText) findViewById(R.id.etNickName);
         EditText edEmail = (EditText) findViewById(R.id.etEmail);
-        EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
+        //EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
         mTapUser.setNickName(edName.getText().toString());
-        mTapUser.setBTCoutbound( edWithDraw.getText().toString());
+        //mTapUser.setBTCoutbound( edWithDraw.getText().toString());
         mTapUser.setEmail(edEmail.getText().toString());
         mTapUser.UpdateUser(mAuthToken);
 
@@ -455,7 +455,7 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
             }
             else {
                 Uri mContentURI = data.getData();
-                ImageView mImageView = (ImageView) findViewById(R.id.imageView);
+                ImageView mImageView = (ImageView) findViewById(R.id.profile_image);
                 String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16) +".jpg", this);
                 String newFUllImagePath = TapCloud.getRealPathFromURI(this,mContentURI);
                 String newThumbImageURL = "";
@@ -487,7 +487,7 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         }
     }
     private void setPic() {
-        ImageView mImageView = (ImageView) findViewById(R.id.imageView);
+        CircleImageView mImageView = (CircleImageView) findViewById(R.id.profile_image);
         // Get the dimensions of the View
         int targetW = mImageView.getWidth();
         int targetH = mImageView.getHeight();
@@ -650,7 +650,7 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
                     TapTxn txn = new TapTxn();
                     txn.TapAfool(mAuthToken, result.replaceAll("-",""),fAmount );
                     mArmed = false;
-                    mArmFrag.setValues(txn.getMessage(), txn.getPayloadURL().toString());
+                    mArmFrag.setValues(txn.getMessage(), txn.getPayloadImageThumb().toString());
                     //tv.setText(txn.getMessage());
 
                 } else {

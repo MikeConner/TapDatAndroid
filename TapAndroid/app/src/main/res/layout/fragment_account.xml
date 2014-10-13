@@ -1,199 +1,216 @@
-<LinearLayout
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".profile_main"
+    tools:ignore="MergeRootFrame"
+    android:background="#f5f4f4">
+    <ImageView
+        android:layout_width="190dp"
+        android:layout_height="147dp"
+        android:id="@+id/left_square"
+        android:layout_marginBottom="40dp"
+        android:src="@drawable/white_rectangle"
+        android:layout_gravity="left|bottom" />
 
+    <ImageView
+        android:layout_width="190dp"
+        android:layout_height="147dp"
+        android:id="@+id/right_square"
+        android:src="@drawable/white_rectangle"
+        android:layout_marginBottom="40dp"
+        android:layout_gravity="right|bottom" />
 
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="257dp">
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/ivRefreshBalance"
-            android:src="@drawable/ic_action_refresh"
-
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
-
-        <ImageView
-                    android:layout_width="135dp"
-                    android:layout_height="135dp"
-                    android:id="@+id/imageView"
-                    android:layout_column="1"
-                    android:src="@drawable/ic_action_person"
-                    android:layout_span="1"
-                    android:onClick="getImage"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true" />
-
-        <EditText
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:inputType="textEmailAddress"
-                    android:ems="10"
-                    android:id="@+id/etNickName"
-                    android:layout_row="2"
-                    android:layout_column="6"
-                    android:text="NickName..."
-            android:layout_below="@+id/imageView"
-            android:layout_centerHorizontal="true"
-            android:editable="true" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Balance: 0 BTC ($0.0)"
-            android:id="@+id/txtBalance"
-            android:layout_column="1"
-            android:layout_span="5"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/ivRefreshBalance"
-            android:layout_alignBottom="@+id/ivRefreshBalance"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="5dp" />
-
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:text="Email Addy..."
-            android:ems="10"
-            android:id="@+id/etEmail"
-            android:layout_row="9"
-            android:layout_column="7"
-            android:editable="false"
-            android:layout_weight="1"
-            android:layout_alignParentBottom="true"
-            android:layout_alignStart="@+id/etNickName" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/imageView6"
-            android:layout_alignParentBottom="true"
-            android:layout_toStartOf="@+id/etNickName"
-            android:src="@drawable/ic_action_refresh"
-            android:onClick="newNickNameMe" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
+    <ImageView
         android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:src="@drawable/white_rectangle"
+        android:layout_marginTop="51dp"
+        android:id="@+id/center_rectangle"
+        android:layout_gravity="center" />
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal">
+        android:layout_marginBottom="20dp"
+        android:textSize="9pt"
+        android:text="angry helicopter"
+        android:id="@+id/etNickName"
+        android:layout_gravity="center" />
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="2dp"
+        android:text="random@random.com"
+        android:textColor="#f6938b"
+        android:id="@+id/etEmail"
+        android:layout_gravity="center" />
 
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content">
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:src="@drawable/b"
+        app:border_width="2dp"
+        app:border_color="#FF000000"
+        android:onClick="getImage"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_marginTop="65dp"/>
 
-            </LinearLayout>
+    <ImageView
+        android:visibility="invisible"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_marginTop="90dp"
+        android:src="@drawable/profile_picture_circle"
+        android:id="@+id/imageView"
+        android:layout_gravity="center_horizontal|top"
+        android:onClick="getImage"/>
 
-        </LinearLayout>
+    <ImageButton
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="50dp"
+        android:id="@+id/edit_profile"
+        android:src="@drawable/edit_profile"
+        android:layout_gravity="center_horizontal|top"
+        android:adjustViewBounds="false" />
 
-    </LinearLayout>
+    <ImageButton
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginBottom="95dp"
+        android:id="@+id/load_button"
+        android:onClick="showDeposit"
+        android:src="@drawable/qr_code_icon"
+        android:layout_gravity="left|bottom" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+    <ImageButton
+        android:layout_width="75dp"
+        android:layout_height="70dp"
+        android:layout_marginEnd="60dp"
+        android:layout_marginBottom="95dp"
+        android:id="@+id/withdraw_button"
+        android:onClick="showWithdraw"
+        android:src="@drawable/withdraw_icon"
+        android:layout_gravity="right|bottom" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="60dp"
+        android:layout_marginStart="50dp"
+        android:textAllCaps="true"
+        android:textColor="#605563"
+        android:textStyle="bold"
+        android:textSize="8pt"
+        android:text="withdraw"
+        android:onClick="showWithdraw"
+        android:id="@+id/withdraw_text"
+        android:layout_gravity="right|bottom" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="208dp"
-                android:layout_height="fill_parent">
+    <TextView
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:text="load phone"
+        android:onClick="showDeposit"
+        android:id="@+id/load_text"
+        android:layout_marginBottom="60dp"
+        android:layout_marginStart="45dp"
+        android:textColor="#605563"
+        android:textStyle="bold"
+        android:textSize="8pt"
+        android:textAllCaps="true"
+        android:layout_gravity="left|bottom" />
 
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:weightSum="1">
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="30dp"
+        android:text="$94"
+        android:paddingBottom="2dp"
+        android:paddingTop="7dp"
+        android:paddingStart="60dp"
+        android:paddingEnd="50dp"
+        android:background="@drawable/balance_bg"
+        android:textColor="#ffffff"
+        android:textColorHighlight="#77ffffff"
+        android:textStyle="bold"
+        android:textSize="10pt"
+        android:id="@+id/txtBalance"
+        android:layout_gravity="center" />
 
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </LinearLayout>
-    </FrameLayout>
-
-    <RelativeLayout
+    <ImageView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="50dp"
+        android:src="@drawable/your_tags_bar"
+        android:id="@+id/your_tags_bar"
+        android:layout_gravity="center_horizontal|bottom"
+        android:onClick="myTags"/>
 
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="2dp"
-            android:background="#ff212121"
-            android:layout_above="@+id/imageView3"
-            android:id="@+id/frameLayout"></FrameLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2 confirmations"
+        android:textAllCaps="true"
+        android:textSize="5pt"
+        android:layout_marginTop="60dp"
+        android:id="@+id/textView"
+        android:layout_gravity="center" />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="My Tags"
-            android:id="@+id/btnTags"
-            android:background="#ff333234"
-            android:textColor="#ffffffff"
-            android:layout_column="1"
-            android:onClick="myTags"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="View Your Tags"
+        android:id="@+id/your_tags_text"
+        android:textAllCaps="true"
+        android:textSize="9pt"
+        android:textColor="#88ffffff"
+        android:layout_marginTop="60dp"
+        android:layout_marginStart="25dp"
+        android:layout_gravity="center_horizontal|bottom"
+        android:onClick="myTags"/>
 
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="137dp"
-            android:id="@+id/imageView3"
-            android:src="@drawable/ic_grid"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.19"
-            android:onClick="showDeposit"
-            android:layout_above="@+id/btnTags"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="15dp"
-            android:layout_marginBottom="10dp" />
-
-        <ImageView
-            android:layout_width="150dp"
-            android:layout_height="84dp"
-            android:id="@+id/imageView4"
-            android:src="@drawable/ic_action_upload"
-            android:clickable="true"
-            android:layout_gravity="center_vertical|right"
-            android:layout_above="@+id/btnTags"
-            android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/imageView3"
-            android:layout_marginRight="15dp"
-            android:layout_marginBottom="10dp"
-            android:onClick="showWithdraw" />
-
-        <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/etWithdraw"
-            android:text="Withdrawl Address..."
-            android:clickable="true"
-            android:focusable="true"
-            android:enabled="true"
-            android:inputType="text"
-            android:layout_alignParentTop="true"
-            android:layout_alignStart="@+id/imageView3" />
-
-    </RelativeLayout>
+    <ImageButton
+        android:layout_width="56dp"
+        android:layout_height="49dp"
+        android:id="@+id/tags_button"
+        android:src="@drawable/tag_image"
+        android:onClick="myTags"
+        android:background="#99605563"
+        android:layout_gravity="left|bottom" />
 
 
-</LinearLayout>
+    <ImageView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView36"
+
+        android:src="@drawable/ic_action_refresh"
+        android:onClick="newNickNameMe" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</FrameLayout>
+
