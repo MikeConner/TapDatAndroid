@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.app.Activity;
+
+import java.text.DecimalFormat;
 import java.util.List;
 
 import co.tapdatapp.tapandroid.R;
@@ -55,12 +57,19 @@ public class YapaAdapter extends ArrayAdapter {
         {
             viewToUse = convertView; holder = (ViewHolder) viewToUse.getTag();
         }
-            holder.tvDol.setText(String.valueOf(item.getTXNamountUSD()));
+        holder.tvDol.setText("$" +new DecimalFormat("#.##").format(item.getTXNamountUSD()));
+//            + String.format("());
             new TapCloud.DownloadImageTask(holder.ivYap)
                 .execute(item.getPayloadImageThumb());
             return viewToUse;
     }
-
+    public static String fmt(double d)
+    {
+        if(d == (long) d)
+            return String.format("%d",(long)d);
+        else
+            return String.format("%s",d);
+    }
     }
 
 
