@@ -2,6 +2,7 @@ package co.tapdatapp.tapandroid;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,6 +40,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -50,6 +52,7 @@ import android.widget.Toast;
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapUser;
 import co.tapdatapp.tapandroid.service.TapTxn;
+import co.tapdatapp.tapandroid.service.YapaAdapter;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -531,7 +534,8 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         mTapUser.loadTxns(TapCloud.getAuthToken());
         //mtagMap = mTapUser.getTags(mAuthToken);
         GridView gridview = (GridView)  findViewById(R.id.gridHistory);
-        ImageAdapter imgAdp = new ImageAdapter(MainActivity.this, mTapUser.myTransactions());
+        //ImageAdapter imgAdp = new ImageAdapter(MainActivity.this, mTapUser.myTransactions());
+        YapaAdapter imgAdp = new YapaAdapter(MainActivity.this, mTapUser.myTransactions());
 
         gridview.setAdapter(imgAdp);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -544,6 +548,24 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
 
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private class ImageAdapter extends BaseAdapter {
         private Context mContext;
         ArrayList<TapTxn> mTapTxns;
