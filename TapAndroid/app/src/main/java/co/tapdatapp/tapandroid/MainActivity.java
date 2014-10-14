@@ -54,8 +54,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MainActivity extends Activity implements AccountFragment.OnFragmentInteractionListener, HistoryFragment.OnFragmentInteractionListener, ArmFragment.OnFragmentInteractionListener, ActionBar.TabListener {
-
-    static final int REQUEST_IMAGE_CAPTURE = 1;
     SectionsPagerAdapter mSectionsPagerAdapter;
     ViewPager mViewPager;
 
@@ -76,11 +74,10 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
     private ArmedFragment mArmFrag;
 
     //For File Uploads
+    static final int REQUEST_IMAGE_CAPTURE = 1;
     String mCurrentPhotoPath;
     boolean mFromCamera = false;
     static final int REQUEST_TAKE_PHOTO = 1;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -209,8 +206,6 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         }
         //end of Tap network Ops
     }
-
-
     @Override
     public void onResume(){
         super.onResume();
@@ -247,137 +242,9 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         super.onPause();
         if(mNfcAdapter != null) mNfcAdapter.disableForegroundDispatch(this);
     }
-    @Override
-    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
 
-    @Override
-    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        // When the given tab is selected, switch to the corresponding page in the ViewPager.
-        mViewPager.setCurrentItem(tab.getPosition());
-        if(tab.getText().equals("HISTORY")){
-            loadTxnHistory();
-        }
-    }
-
-    @Override
-    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_arm, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            Fragment frag;
-            switch (position) {
-                case 0:
-                    frag = new AccountFragment().newInstance("1","2");
-                    //frag = mAccountFrag;
-                    break;
-                case 1:
-                    frag = new ArmFragment().newInstance("1","2");
-                   // frag = mTapFrag;
-                    break;
-                case 2:
-                    frag = new HistoryFragment().newInstance("1","2");
-                    //frag = mHistoryFrag ;
-                    break;
-
-                default: throw new IllegalArgumentException("Invalid Section Number");
-            }
-            return frag;
-
-        }
-
-        @Override
-        public int getCount() {
-            // Show 3 total pages.
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return getString(R.string.title_section1).toUpperCase(l);
-                case 1:
-                    return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
-            }
-            return null;
-        }
-    }
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        // we need this for fragments / menus
-        //not sure what we have to do here if anything
-    }
-
-
-
-    public void myTags(View view){
-        TagsFragment mTags = new TagsFragment();
-        Intent i = new Intent(this,TagActivity.class);
-        i.putExtra("AuthToken", mAuthToken);
-        startActivity(i);
-
-    }
-    public void newNickNameMe(View view){
-        TextView et = (TextView) findViewById(R.id.etNickName);
-        et.setText(        mTapUser.getNewNickname(mAuthToken));
-
-    }
-    public void writeUser(View view){
-        EditText edName = (EditText) findViewById(R.id.etNickName);
-        EditText edEmail = (EditText) findViewById(R.id.etEmail);
-        //EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
-        mTapUser.setNickName(edName.getText().toString());
-        //mTapUser.setBTCoutbound( edWithDraw.getText().toString());
-        mTapUser.setEmail(edEmail.getText().toString());
-        mTapUser.UpdateUser(mAuthToken);
-
-    }
-
+    //Image Stuff
     public void getImage(View view){
-
-        // Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        //  startActivityForResult(takePicture, 0);//zero can be replaced with any action code
-
-        // Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-        //         android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        // startActivityForResult(pickPhoto , 1);//one can be replaced with any action code
         selectImage();
     }
     private File createImageFile() throws IOException {
@@ -399,7 +266,6 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
     private void selectImage() {
         final CharSequence[] items = { "Take Photo", "Choose from Library",
                 "Cancel" };
-
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Add Photo!");
         builder.setItems(items, new DialogInterface.OnClickListener() {
@@ -511,12 +377,6 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         mImageView.setImageBitmap(bitmap);
     }
 
-    public   TapUser getUserContext(){
-        return mTapUser;
-    }
-
-
-
 
     //ARM SCREEN
     public void armOrSend(View v){
@@ -624,7 +484,6 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
 
     }
 
-
     //NFC STUFF
     @Override
     protected void onNewIntent(Intent intent) {
@@ -665,8 +524,6 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
             }
         }
     }
-
-
 
     //HISTORY STUFF
     private void loadTxnHistory(){
@@ -741,7 +598,6 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
 
     }
 
-
     //ACCOUNT Stuff
     public void showDeposit(View view){
         //show fragment with qr code and details
@@ -771,5 +627,125 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
         mWithdrawFrag.show(ft, "withdraw");
 
     }
+    public void myTags(View view){
+        TagsFragment mTags = new TagsFragment();
+        Intent i = new Intent(this,TagActivity.class);
+        i.putExtra("AuthToken", mAuthToken);
+        startActivity(i);
+
+    }
+    public void newNickNameMe(View view){
+        TextView et = (TextView) findViewById(R.id.etNickName);
+        et.setText(        mTapUser.getNewNickname(mAuthToken));
+
+    }
+    public void writeUser(View view){
+        EditText edName = (EditText) findViewById(R.id.etNickName);
+        EditText edEmail = (EditText) findViewById(R.id.etEmail);
+        //EditText edWithDraw = (EditText) findViewById(R.id.etWithdraw);
+        mTapUser.setNickName(edName.getText().toString());
+        //mTapUser.setBTCoutbound( edWithDraw.getText().toString());
+        mTapUser.setEmail(edEmail.getText().toString());
+        mTapUser.UpdateUser(mAuthToken);
+
+    }
+
+    //generic stuff for fragments
+    public   TapUser getUserContext(){
+        return mTapUser;
+    }
+
+    @Override
+    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+    @Override
+    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+        mViewPager.setCurrentItem(tab.getPosition());
+        if(tab.getText().equals("HISTORY")){
+            loadTxnHistory();
+        }
+    }
+    @Override
+    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        //getMenuInflater().inflate(R.menu.activity_arm, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    /**
+     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
+     * one of the sections/tabs/pages.
+     */
+    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+
+        public SectionsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+
+            Fragment frag;
+            switch (position) {
+                case 0:
+                    frag = new AccountFragment().newInstance("1","2");
+                    //frag = mAccountFrag;
+                    break;
+                case 1:
+                    frag = new ArmFragment().newInstance("1","2");
+                    // frag = mTapFrag;
+                    break;
+                case 2:
+                    frag = new HistoryFragment().newInstance("1","2");
+                    //frag = mHistoryFrag ;
+                    break;
+
+                default: throw new IllegalArgumentException("Invalid Section Number");
+            }
+            return frag;
+
+        }
+
+        @Override
+        public int getCount() {
+            // Show 3 total pages.
+            return 3;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            Locale l = Locale.getDefault();
+            switch (position) {
+                case 0:
+                    return getString(R.string.title_section1).toUpperCase(l);
+                case 1:
+                    return getString(R.string.title_section2).toUpperCase(l);
+                case 2:
+                    return getString(R.string.title_section3).toUpperCase(l);
+            }
+            return null;
+        }
+    }
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        // we need this for fragments / menus
+        //not sure what we have to do here if anything
+    }
+
+
 
 }

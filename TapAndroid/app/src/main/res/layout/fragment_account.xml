@@ -57,7 +57,7 @@
         app:border_color="#FF000000"
         android:onClick="getImage"
         android:layout_gravity="center_horizontal|top"
-        android:layout_marginTop="65dp"/>
+        android:layout_marginTop="35dp"/>
 
     <ImageView
         android:visibility="invisible"
@@ -65,7 +65,7 @@
         android:layout_height="130dp"
         android:layout_marginTop="90dp"
         android:src="@drawable/profile_picture_circle"
-        android:id="@+id/imageView"
+        android:id="@+id/yapa1"
         android:layout_gravity="center_horizontal|top"
         android:onClick="getImage"/>
 
@@ -83,7 +83,7 @@
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_marginStart="60dp"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="85dp"
         android:id="@+id/load_button"
         android:onClick="showDeposit"
         android:src="@drawable/qr_code_icon"
@@ -91,9 +91,9 @@
 
     <ImageButton
         android:layout_width="75dp"
-        android:layout_height="70dp"
+        android:layout_height="75dp"
         android:layout_marginEnd="60dp"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="80dp"
         android:id="@+id/withdraw_button"
         android:onClick="showWithdraw"
         android:src="@drawable/withdraw_icon"
@@ -101,8 +101,8 @@
 
     <TextView
         android:layout_width="150dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="60dp"
+        android:layout_height="45dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginStart="50dp"
         android:textAllCaps="true"
         android:textColor="#605563"
@@ -115,11 +115,11 @@
 
     <TextView
         android:layout_width="150dp"
-        android:layout_height="40dp"
+        android:layout_height="45dp"
         android:text="load phone"
         android:onClick="showDeposit"
         android:id="@+id/load_text"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="40dp"
         android:layout_marginStart="45dp"
         android:textColor="#605563"
         android:textStyle="bold"

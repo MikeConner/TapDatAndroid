@@ -6,6 +6,9 @@ import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
@@ -14,6 +17,7 @@ import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.nfc.tech.NdefFormatable;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,10 +29,13 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import co.tapdatapp.tapandroid.service.TapCloud;
 import co.tapdatapp.tapandroid.service.TapTag;
+import co.tapdatapp.tapandroid.service.TapUser;
 import co.tapdatapp.tapandroid.service.TapYapa;
 
 
@@ -60,7 +67,12 @@ public class WriteActivity extends Activity {
     public void onResume(){
         super.onResume();
         EditText edName = (EditText) findViewById(R.id.edTagName);
-        edName.setText(mTapTag.getTagName());
+        if (mTapTag.getTagName().equals("null")){
+            edName.setText("Name Your Tag");
+
+        }else{
+            edName.setText(mTapTag.getTagName());
+        }
         TextView tvID = (TextView) findViewById(R.id.tvID);
         tvID.setText(mTapTag.getTagID());
 
@@ -81,7 +93,7 @@ public class WriteActivity extends Activity {
         //first Yapa
         if(myYappas.size() > 0) {
             EditText edMessage = (EditText) findViewById(R.id.dtYapaMessage);
-            ImageView iv = (ImageView) findViewById(R.id.imageView);
+            ImageView iv = (ImageView) findViewById(R.id.yapa1);
 
             edMessage.setText(myYappas.get(0).getContent());
             new TapCloud.DownloadImageTask(iv)
@@ -119,6 +131,27 @@ public class WriteActivity extends Activity {
     }
 
     //Image stuff
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    String mCurrentPhotoPath;
+
+    static final int REQUEST_TAKE_PHOTO = 1;
+    private TapCloud mTapCloud = new TapCloud();
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+        return image;
+    }
     public void selectImageYapa1(View v){
         selectImage(0);
     }
@@ -171,6 +204,100 @@ public class WriteActivity extends Activity {
         builder.show();
 
     }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            if (mFromCamera) {
+                //TODO: This does not work for From Camera!!!
+                String b = mCurrentPhotoPath;
+                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+                File f = new File(mCurrentPhotoPath);
+                Uri contentUri = Uri.fromFile(f);
+                mediaScanIntent.setData(contentUri);
+                this.sendBroadcast(mediaScanIntent);
+                setPic(mImageID);
+            }
+            else {
+                Uri mContentURI = data.getData();
+                ImageView mImageView = (ImageView) findViewById(R.id.yapa1);
+                String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16) +".jpg", this);
+                String newFUllImagePath = TapCloud.getRealPathFromURI(this,mContentURI);
+                String newThumbImageURL = "";
+                try {
+                    ExifInterface exif = new ExifInterface(newFUllImagePath);
+                    byte[] imageData = exif.getThumbnail();
+                    Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                    mImageView.setImageBitmap(thumbnail);
+
+                    newThumbImageURL = mTapCloud.uploadToS3withStream(imageData, TapUser.getRandomString(16) + ".jpg", this);
+
+
+
+
+
+                    ArrayList<TapYapa> myYappas = mTapTag.myYappas();
+                    if(myYappas.size() > 0) {
+                        EditText edMessage = (EditText) findViewById(R.id.dtYapaMessage);
+                        ImageView iv = (ImageView) findViewById(R.id.yapa1);
+
+                        myYappas.get(0).setContent(edMessage.getText().toString());
+                        myYappas.get(0).setThumbYapa(newThumbImageURL);
+                        myYappas.get(0).setFullYapa(newFullImageURL);
+                        myYappas.get(0).updateYapa(mAuthToken, mTapTag.getTagID());
+
+int a= 5;
+                      //  new TapCloud.DownloadImageTask(iv)
+                        //        .execute(myYappas.get(0).getThumbYapa());
+                    }
+                }
+                catch (Exception e){
+                    //TODO: not sure what to catch here?
+                }
+
+                //    String selectedImagePath = getPath(mContentURI);
+                //   String newThumbImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
+
+
+//                mTapUser.setProfilePicFull(newFullImageURL );
+ //               mTapUser.setProfilePicThumb(newThumbImageURL );
+
+
+//                mTapUser.UpdateUser(mAuthToken);
+                setPic(mImageID);
+            }
+        }
+    }
+    private void setPic(int i) {
+        ImageView mImageView;
+        if (i==0) {
+             mImageView = (ImageView) findViewById(R.id.yapa1);
+        }else{
+
+             mImageView = (ImageView) findViewById(R.id.yapa2);
+            }
+
+        int targetW = mImageView.getWidth();
+        int targetH = mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        //Bitmap bm = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+        mImageView.setImageBitmap(bitmap);
+    }
+
 
     //MENU STUFF
     @Override

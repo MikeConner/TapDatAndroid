@@ -3,8 +3,10 @@ package co.tapdatapp.tapandroid;
 
 
 import android.app.DialogFragment;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,15 +36,17 @@ public class WithdrawFragment extends DialogFragment {
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
          View view =  inflater.inflate(R.layout.fragment_withdraw, container, false);
 
-        ((Button) view.findViewById(R.id.btnWithdraw)).setOnClickListener(new View.OnClickListener() {
+      /*  ((Button) view.findViewById(R.id.btnWithdraw)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 TextView tv = (TextView) getView().findViewById(R.id.tvWithdrawStatus);
                 tv.setText("Gettin' er done!");
+
                 //TODO: Set code to withdraw
                 //TODO: return to caller -> success or not, check balance / status of withdrawl!!!
                 //TODO: THIS IS CRITICAL!
             }
         });
+        */
         return view;
     }
 
@@ -62,12 +66,22 @@ public class WithdrawFragment extends DialogFragment {
         {
             // btnWithdraw.setEnabled(true);
         }
+        Display display = getActivity().getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int width = size.x;
+        int height = size.y;
+        //float densi = getActivity().getResources().getDisplayMetrics().density;
+        getDialog().getWindow().setLayout(width, height);
+    }
 
-
-
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setStyle(STYLE_NO_FRAME,android.R.style.Theme);
 
 
     }
-
+    // setStyle(STYLE_NO_FRAME,android.R.style.Theme);
 
 }
