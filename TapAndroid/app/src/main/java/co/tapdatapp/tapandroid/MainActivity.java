@@ -1,5 +1,6 @@
 package co.tapdatapp.tapandroid;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -281,14 +282,12 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
                         File photoFile = null;
                         try {
                             photoFile = createImageFile();
-                        } catch (IOException ex) {
-                            // Error occurred while creating the File
-
+                        } catch (IOException ex) { //catch file creation issues?
                         }
                         // Continue only if the File was successfully created
                         if (photoFile != null) {
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                    Uri.fromFile(photoFile));
+//                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+  //                                  Uri.fromFile(photoFile));
                             startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
                         }
 
@@ -312,19 +311,64 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             if (mFromCamera) {
-             //TODO: This does not work for From Camera!!!
-             String b = mCurrentPhotoPath;
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                File f = new File(mCurrentPhotoPath);
-                Uri contentUri = Uri.fromFile(f);
-                mediaScanIntent.setData(contentUri);
-                this.sendBroadcast(mediaScanIntent);
+             //TODO: This only gets a shitty tumbnail right now!
+              Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress( Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
 
-                setPic();
+
+                String newFullImageURL = mTapCloud.uploadToS3withStream(byteArray, TapUser.getRandomString(16) + ".jpg", this);
+                Bitmap thumb = Bitmap.createScaledBitmap(bmp,512,512,false);
+                ByteArrayOutputStream thumbstream = new ByteArrayOutputStream();
+                thumb.compress(Bitmap.CompressFormat.PNG, 100, thumbstream);
+                byte[] thumbarray = thumbstream.toByteArray();
+                String newThumbImageURL = mTapCloud.uploadToS3withStream(thumbarray, TapUser.getRandomString(16) + ".jpg", this);
+
+
+  //              BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+  //              bmOptions.inJustDecodeBounds = true;
+ //               int targetW = 512;
+ //               int targetH = 512;
+  //              int photoW = bmOptions.outWidth;
+   //             int photoH = bmOptions.outHeight;
+                //                BitmapFactory.decode (mCurrentPhotoPath, bmOptions);
+//                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                File f = new File(mCurrentPhotoPath);
+//                Uri contentUri = Uri.fromFile(f);
+//                mediaScanIntent.setData(contentUri);
+//                this.sendBroadcast(mediaScanIntent);
+//                BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+                // Determine how much to scale down the image
+//                int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+//                bmOptions.inJustDecodeBounds = false;
+//                bmOptions.inSampleSize = scaleFactor;
+//                bmOptions.inPurgeable = true;
+
+        //        Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+                //THIS IS NULL!!
+                //mCurrentPhotoPath
+  //              setPic();
+         //       String newFullImageURL = mTapCloud.uploadToS3withURI(contentUri, TapUser.getRandomString(16) +".jpg", this);
+         //       String newFUllImagePath = TapCloud.getRealPathFromURI(this,contentUri);
+        //        String newThumbImageURL = "";
+   //             try {
+         //           ExifInterface exif = new ExifInterface(newFUllImagePath);
+         //           byte[] imageData = exif.getThumbnail();
+         //           Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
+                    //mImageView.setImageBitmap(thumbnail);
+         //           newThumbImageURL = mTapCloud.uploadToS3withStream(imageData, TapUser.getRandomString(16) + ".jpg", this);
+       //         }
+     //           catch (Exception e){
+      //              //TODO: not sure what to catch here?
+      //          }
+                mTapUser.setProfilePicFull(newFullImageURL );
+                mTapUser.setProfilePicThumb(newThumbImageURL );
+                mTapUser.UpdateUser(mAuthToken);
             }
             else {
                 Uri mContentURI = data.getData();
-                ImageView mImageView = (ImageView) findViewById(R.id.profile_image);
+                //ImageView mImageView = (ImageView) findViewById(R.id.profile_image);
                 String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16) +".jpg", this);
                 String newFUllImagePath = TapCloud.getRealPathFromURI(this,mContentURI);
                 String newThumbImageURL = "";
@@ -332,26 +376,15 @@ public class MainActivity extends Activity implements AccountFragment.OnFragment
                     ExifInterface exif = new ExifInterface(newFUllImagePath);
                     byte[] imageData = exif.getThumbnail();
                     Bitmap thumbnail = BitmapFactory.decodeByteArray(imageData, 0, imageData.length);
-                    mImageView.setImageBitmap(thumbnail);
-
+                    //mImageView.setImageBitmap(thumbnail);
                      newThumbImageURL = mTapCloud.uploadToS3withStream(imageData, TapUser.getRandomString(16) + ".jpg", this);
-
-
                 }
                 catch (Exception e){
                     //TODO: not sure what to catch here?
                 }
-
-            //    String selectedImagePath = getPath(mContentURI);
-             //   String newThumbImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16), this);
-
-
                 mTapUser.setProfilePicFull(newFullImageURL );
                 mTapUser.setProfilePicThumb(newThumbImageURL );
-
-
                 mTapUser.UpdateUser(mAuthToken);
-
             }
         }
     }

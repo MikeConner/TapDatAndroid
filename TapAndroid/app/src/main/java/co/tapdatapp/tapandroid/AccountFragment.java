@@ -100,6 +100,7 @@ public class AccountFragment extends Fragment {
         String mThumb = mTapUser.getProfilePicThumb();
         if (mThumb.equals("") || mThumb.equals("null")){
             //do nothing or set it to some image?
+            ivProfilePic.setImageResource(R.drawable.brienne);
         }
         else{
             //TODO: Check to see if we've already done this.. if not get it again

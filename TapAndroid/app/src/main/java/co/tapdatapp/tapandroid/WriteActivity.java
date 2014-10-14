@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -173,25 +174,19 @@ public class WriteActivity extends Activity {
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    mFromCamera = true;
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-                        File photoFile = null;
-    /*                    try {
-       //                     photoFile = createImageFile();
-                        } catch (IOException ex) {
-                            // Error occurred while creating the File
+            if (items[item].equals("Take Photo")) {
+                mFromCamera = true;
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    File photoFile = null;
 
-                        }
-  */                      // Continue only if the File was successfully created
-                        if (photoFile != null) {
-                            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
-                                    Uri.fromFile(photoFile));
-//                            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-                        }
+                    if (photoFile != null) {
+//                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+//                                Uri.fromFile(photoFile));
 
                     }
+                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+                }
                 } else if (items[item].equals("Choose from Library")) {
                     mFromCamera = false;
                     Intent intent = new Intent(
@@ -211,14 +206,67 @@ public class WriteActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             if (mFromCamera) {
-                //TODO: This does not work for From Camera!!!
-                String b = mCurrentPhotoPath;
-                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-                File f = new File(mCurrentPhotoPath);
-                Uri contentUri = Uri.fromFile(f);
-                mediaScanIntent.setData(contentUri);
-                this.sendBroadcast(mediaScanIntent);
-                setPic(mImageID);
+                //TODO: This only gets a thumbnail... to get full image this has to be rewritten!
+
+                Bitmap bmp = (Bitmap) data.getExtras().get("data");
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                bmp.compress( Bitmap.CompressFormat.PNG, 100, stream);
+                byte[] byteArray = stream.toByteArray();
+
+
+                String newFullImageURL = mTapCloud.uploadToS3withStream(byteArray, TapUser.getRandomString(16) + ".jpg", this);
+                Bitmap thumb = Bitmap.createScaledBitmap(bmp,512,512,false);
+                ByteArrayOutputStream thumbstream = new ByteArrayOutputStream();
+                thumb.compress(Bitmap.CompressFormat.PNG, 100, thumbstream);
+                byte[] thumbarray = thumbstream.toByteArray();
+                String newThumbImageURL = mTapCloud.uploadToS3withStream(thumbarray, TapUser.getRandomString(16) + ".jpg", this);
+
+                ArrayList<TapYapa> myYappas = mTapTag.myYappas();
+                if(myYappas.size() > 0) {
+
+                    EditText edMessage;
+                    ImageView iv;
+
+                    if (mImageID == 0) {
+                        edMessage  = (EditText) findViewById(R.id.dtYapaMessage);
+                        iv = (ImageView) findViewById(R.id.yapa1);
+                        myYappas.get(0).setContent(edMessage.getText().toString());
+                        myYappas.get(0).setThumbYapa(newThumbImageURL);
+                        myYappas.get(0).setFullYapa(newFullImageURL);
+                        myYappas.get(0).updateYapa(mAuthToken, mTapTag.getTagID());
+                    }
+                    else {
+                        edMessage  = (EditText) findViewById(R.id.edBonusYapa);
+                        iv = (ImageView) findViewById(R.id.yapa2);
+                        if (myYappas.size()==1){
+                            //we only have the first one. We need to create a new Yapa to save
+                            TapYapa newYap = new TapYapa();
+                            newYap.setContent(edMessage.getText().toString());
+                            newYap.setThumbYapa(newThumbImageURL);
+                            newYap.setFullYapa(newFullImageURL);
+                            newYap.setThreshold(5);
+                            mTapTag.addYapa(mAuthToken,newYap);
+                        }
+                        else {
+                            myYappas.get(1).setContent(edMessage.getText().toString());
+                            myYappas.get(1).setThumbYapa(newThumbImageURL);
+                            myYappas.get(1).setFullYapa(newFullImageURL);
+                            myYappas.get(1).updateYapa(mAuthToken, mTapTag.getTagID());
+                        }
+                    }
+
+                    int a= 5;
+                    //  new TapCloud.DownloadImageTask(iv)
+                    //        .execute(myYappas.get(0).getThumbYapa());
+                }
+
+//                String b = mCurrentPhotoPath;
+//                Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+//                File f = new File(mCurrentPhotoPath);
+//                Uri contentUri = Uri.fromFile(f);
+//                mediaScanIntent.setData(contentUri);
+//                this.sendBroadcast(mediaScanIntent);
+//                setPic(mImageID);
             }
             else {
                 Uri mContentURI = data.getData();
