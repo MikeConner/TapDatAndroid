@@ -114,7 +114,10 @@ public class WriteActivity extends Activity {
             //get the second on in here
             if (myYappas.size() > 1){
                 EditText edMessageBonus = (EditText) findViewById(R.id.edBonusYapa);
-                ImageView ivBonus = (ImageView) findViewById(R.id.imageView2);
+                ImageView ivBonus = (ImageView) findViewById(R.id.yapa2);
+                edMessageBonus.setText(myYappas.get(1).getContent());
+                new TapCloud.DownloadImageTask(ivBonus)
+                        .execute(myYappas.get(1).getThumbYapa());
 
                 //threshhold
                 //text
@@ -219,7 +222,14 @@ public class WriteActivity extends Activity {
             }
             else {
                 Uri mContentURI = data.getData();
-                ImageView mImageView = (ImageView) findViewById(R.id.yapa1);
+                ImageView mImageView;
+                if (mImageID == 0 ){
+                    mImageView = (ImageView) findViewById(R.id.yapa1);
+                }
+                else {
+                    mImageView = (ImageView) findViewById(R.id.yapa2);
+
+                }
                 String newFullImageURL = mTapCloud.uploadToS3withURI(mContentURI, TapUser.getRandomString(16) +".jpg", this);
                 String newFUllImagePath = TapCloud.getRealPathFromURI(this,mContentURI);
                 String newThumbImageURL = "";
@@ -232,20 +242,41 @@ public class WriteActivity extends Activity {
                     newThumbImageURL = mTapCloud.uploadToS3withStream(imageData, TapUser.getRandomString(16) + ".jpg", this);
 
 
-
-
-
                     ArrayList<TapYapa> myYappas = mTapTag.myYappas();
                     if(myYappas.size() > 0) {
-                        EditText edMessage = (EditText) findViewById(R.id.dtYapaMessage);
-                        ImageView iv = (ImageView) findViewById(R.id.yapa1);
 
-                        myYappas.get(0).setContent(edMessage.getText().toString());
-                        myYappas.get(0).setThumbYapa(newThumbImageURL);
-                        myYappas.get(0).setFullYapa(newFullImageURL);
-                        myYappas.get(0).updateYapa(mAuthToken, mTapTag.getTagID());
+                        EditText edMessage;
+                        ImageView iv;
 
-int a= 5;
+                        if (mImageID == 0) {
+                            edMessage  = (EditText) findViewById(R.id.dtYapaMessage);
+                            iv = (ImageView) findViewById(R.id.yapa1);
+                            myYappas.get(0).setContent(edMessage.getText().toString());
+                            myYappas.get(0).setThumbYapa(newThumbImageURL);
+                            myYappas.get(0).setFullYapa(newFullImageURL);
+                            myYappas.get(0).updateYapa(mAuthToken, mTapTag.getTagID());
+                        }
+                        else {
+                            edMessage  = (EditText) findViewById(R.id.edBonusYapa);
+                            iv = (ImageView) findViewById(R.id.yapa2);
+                            if (myYappas.size()==1){
+                                //we only have the first one. We need to create a new Yapa to save
+                                TapYapa newYap = new TapYapa();
+                                newYap.setContent(edMessage.getText().toString());
+                                newYap.setThumbYapa(newThumbImageURL);
+                                newYap.setFullYapa(newFullImageURL);
+                                newYap.setThreshold(5);
+                                mTapTag.addYapa(mAuthToken,newYap);
+                            }
+                            else {
+                                myYappas.get(1).setContent(edMessage.getText().toString());
+                                myYappas.get(1).setThumbYapa(newThumbImageURL);
+                                myYappas.get(1).setFullYapa(newFullImageURL);
+                                myYappas.get(1).updateYapa(mAuthToken, mTapTag.getTagID());
+                            }
+                        }
+
+                        int a= 5;
                       //  new TapCloud.DownloadImageTask(iv)
                         //        .execute(myYappas.get(0).getThumbYapa());
                     }

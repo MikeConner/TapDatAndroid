@@ -166,7 +166,7 @@ public class TagActivity extends Activity implements TagsFragment.OnFragmentInte
                 imageView = (ImageView) convertView;
             }
 //mThumbIds[position]
-            imageView.setImageResource(R.drawable.ic_launcher);
+            imageView.setImageResource(R.drawable.logo);
             return imageView;
         }
 
