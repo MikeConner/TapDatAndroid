@@ -46,3 +46,15 @@ tapdat/build/intermediates/model_data.bin
 tapdat/app/build/intermediates/res/debug/xml/nfc_tech_filter.xml
 tapdat/.idea/workspace.xml
 profile with notes.bmp.crdownload
+TapAndroid/app/app.iml
+TapAndroid/gradle/gradle.iml
+TapAndroid/gradle/gradle/wrapper/gradle-wrapper.jar
+TapAndroid/gradle/gradle/wrapper/gradle-wrapper.properties
+TapAndroid/gradle/gradlew/*
+TapAndroid/gradlew
+TapAndroid/TapAndroid.iml
+TapAndroid/gradlew
+TapAndroid/gradlew/*
+TapAndroid/gradle/gradlew
+TapAndroid/gradle/gradlew.bat
+TapAndroid/gradle/wrapper/gradle-wrapper.jar
